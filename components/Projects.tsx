@@ -1,7 +1,9 @@
-import Section from "./ui/Section";
-import Card from "./ui/Card";
 import Badge from "./ui/Badge";
 import Button from "./ui/Button";
+import Card from "./ui/Card";
+import Section from "./ui/Section";
+
+type ProjectLink = { label: string; href: string };
 
 type Project = {
   name: string;
@@ -11,7 +13,7 @@ type Project = {
   role: string;
   tech: string[];
   features: string[];
-  links: { label: string; href: string }[];
+  links: ProjectLink[];
 };
 
 const projects: Project[] = [
@@ -70,8 +72,7 @@ const projects: Project[] = [
     subtitle: "UI/UX Exploration Project",
     problem:
       "Balancing aesthetics with usability is key in modern interfaces. Lumi focuses on refining micro-interactions and layout clarity.",
-    role:
-      "Designed and implemented UI components with emphasis on interaction, spacing, and typography.",
+    role: "Designed and implemented UI components with emphasis on interaction, spacing, and typography.",
     tech: ["React", "Tailwind CSS"],
     features: [
       "Refined card layouts with subtle hover interactions",
@@ -156,9 +157,8 @@ export default function Projects() {
   return (
     <Section id="projects" number="02" label="Projects">
       <p className="max-w-3xl text-sm leading-relaxed text-gray-400">
-        Selected projects demonstrating strong fundamentals in frontend development,
-        UI design, and scalable component-based architecture. Replace placeholder
-        content with real metrics, deployments, and production data as needed.
+        Selected projects demonstrating strong fundamentals in frontend development, UI design, and
+        scalable component-based architecture.
       </p>
 
       <div className="mt-6 grid gap-4">
@@ -172,3 +172,4 @@ export default function Projects() {
     </Section>
   );
 }
+

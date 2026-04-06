@@ -1,6 +1,6 @@
-import Section from "./ui/Section";
-import Card from "./ui/Card";
 import Badge from "./ui/Badge";
+import Card from "./ui/Card";
+import Section from "./ui/Section";
 
 const skillGroups = [
   {
@@ -11,14 +11,20 @@ const skillGroups = [
   {
     title: "UI & UX",
     description: "Practical skills for clean layouts, accessible components, and consistency.",
-    items: ["Tailwind CSS", "Responsive design", "Accessibility", "Forms & validation", "Component systems"],
+    items: [
+      "Tailwind CSS",
+      "Responsive design",
+      "Accessibility",
+      "Forms & validation",
+      "Component systems",
+    ],
   },
   {
     title: "Engineering",
     description: "Tools and habits that support shipping and collaboration.",
     items: ["Git", "GitHub PRs", "Debugging", "API integration", "Deployment (Vercel)"],
   },
-];
+] as const;
 
 export default function Skills() {
   return (
@@ -39,3 +45,4 @@ export default function Skills() {
     </Section>
   );
 }
+

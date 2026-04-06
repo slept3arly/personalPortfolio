@@ -1,6 +1,6 @@
-import Section from "./ui/Section";
-import Card from "./ui/Card";
 import Badge from "./ui/Badge";
+import Card from "./ui/Card";
+import Section from "./ui/Section";
 
 export default function About() {
   return (
@@ -8,16 +8,15 @@ export default function About() {
       <div className="grid gap-4 sm:grid-cols-3">
         <Card className="sm:col-span-2">
           <p className="text-sm leading-relaxed text-gray-300">
-            I’m a developer focused on building <span className="text-white">reliable, user-friendly web
-            applications</span>. I care about clean architecture, reusable UI, and the small details that
-            make a product feel “finished” — accessible interactions, consistent spacing, and clear
-            information hierarchy.
+            I’m a developer focused on building{" "}
+            <span className="text-white">reliable, user-friendly web applications</span>. I care about
+            clean architecture, reusable UI, and the small details that make a product feel “finished” —
+            accessible interactions, consistent spacing, and clear information hierarchy.
           </p>
           <p className="mt-4 text-sm leading-relaxed text-gray-300">
-            Recently, I’ve been working on projects like{" "}
-            <span className="text-white">Vedic Wellness</span> where I practice real-world patterns:
-            building a structured UI system, organizing data models, and presenting features in a
-            recruiter-friendly way (problem → approach → outcome).
+            Recently, I’ve been working on projects like <span className="text-white">Vedic Wellness</span>{" "}
+            where I practice real-world patterns: building a structured UI system, organizing data models,
+            and presenting features in a recruiter-friendly way (problem → approach → outcome).
           </p>
         </Card>
 
@@ -40,3 +39,4 @@ export default function About() {
     </Section>
   );
 }
+

@@ -1,5 +1,5 @@
-import Section from "./ui/Section";
 import Card from "./ui/Card";
+import Section from "./ui/Section";
 
 type Item = {
   title: string;

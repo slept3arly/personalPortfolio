@@ -1,0 +1,4 @@
+# This repository is a Next.js (Node.js) project.
+# `requirements.txt` is included as a convenience placeholder for platforms/tools
+# that expect it, but it is not used to build or run this app.
+

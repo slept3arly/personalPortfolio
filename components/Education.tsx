@@ -1,6 +1,6 @@
-import Section from "./ui/Section";
-import Card from "./ui/Card";
 import Badge from "./ui/Badge";
+import Card from "./ui/Card";
+import Section from "./ui/Section";
 
 type EducationItem = {
   program: string;

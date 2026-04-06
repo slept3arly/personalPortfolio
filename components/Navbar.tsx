@@ -1,8 +1,11 @@
 export default function Navbar() {
   return (
-    <nav className="sticky top-0 z-50 border-b border-gray-900/60 bg-black/70 backdrop-blur">
+    <nav
+      className="sticky top-0 z-50 border-b border-gray-900/60 bg-black/70 backdrop-blur"
+      aria-label="Primary"
+    >
       <div className="mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-4 text-sm">
-        <a href="#top" className="font-semibold text-white">
+        <a href="#top" className="font-semibold text-white" aria-label="Back to top">
           VN
         </a>
         <div className="hidden items-center gap-5 text-gray-400 sm:flex">
@@ -47,3 +50,4 @@ export default function Navbar() {
     </nav>
   );
 }
+

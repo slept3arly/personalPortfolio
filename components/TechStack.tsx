@@ -1,6 +1,6 @@
-import Section from "./ui/Section";
-import Card from "./ui/Card";
 import Badge from "./ui/Badge";
+import Card from "./ui/Card";
+import Section from "./ui/Section";
 
 const frontend = ["Next.js", "React", "TypeScript", "Tailwind CSS", "HTML", "CSS"];
 const backend = ["Node.js", "Express (placeholder)", "REST APIs", "Auth (JWT/session)"];
