@@ -1,3 +1,7 @@
+"use client";
+
+import { motion, useReducedMotion } from "framer-motion";
+import { motionViewport, projectCardVariants, staggerContainerVariants } from "@/lib/motion";
 import Badge from "./ui/Badge";
 import Button from "./ui/Button";
 import Card from "./ui/Card";
@@ -85,74 +89,77 @@ const projects: Project[] = [
 
 function ProjectCard({ project }: { project: Project }) {
   return (
-    <Card
-      className={
-        project.featured
-          ? "border-gray-700 bg-gradient-to-b from-white/[0.08] to-transparent ring-1 ring-white/10"
-          : undefined
-      }
-    >
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <div className="flex flex-wrap items-center gap-2">
-            <h3 className="text-base font-semibold text-white">{project.name}</h3>
-            {project.featured && (
-              <span className="rounded-full border border-gray-700 bg-white/5 px-2.5 py-0.5 text-xs text-gray-200">
-                Featured
-              </span>
-            )}
+    <motion.div variants={projectCardVariants}>
+      <Card
+        className={
+          project.featured
+            ? "border-gray-700 bg-gradient-to-b from-white/[0.08] to-transparent ring-1 ring-white/10"
+            : undefined
+        }
+      >
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="text-base font-semibold text-white">{project.name}</h3>
+              {project.featured && (
+                <span className="rounded-full border border-gray-700 bg-white/5 px-2.5 py-0.5 text-xs text-gray-200">
+                  Featured
+                </span>
+              )}
+            </div>
+            <p className="mt-1 text-sm text-gray-400">{project.subtitle}</p>
           </div>
-          <p className="mt-1 text-sm text-gray-400">{project.subtitle}</p>
         </div>
-      </div>
 
-      <div className="mt-4 grid gap-4 sm:grid-cols-2">
-        <div>
-          <p className="text-xs font-medium tracking-widest text-gray-500">Problem</p>
-          <p className="mt-2 text-sm leading-relaxed text-gray-300">{project.problem}</p>
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          <div>
+            <p className="text-xs font-medium tracking-widest text-gray-500">Problem</p>
+            <p className="mt-2 text-sm leading-relaxed text-gray-300">{project.problem}</p>
+          </div>
+          <div>
+            <p className="text-xs font-medium tracking-widest text-gray-500">Role</p>
+            <p className="mt-2 text-sm leading-relaxed text-gray-300">{project.role}</p>
+          </div>
         </div>
-        <div>
-          <p className="text-xs font-medium tracking-widest text-gray-500">Role</p>
-          <p className="mt-2 text-sm leading-relaxed text-gray-300">{project.role}</p>
-        </div>
-      </div>
 
-      <div className="mt-4">
-        <p className="text-xs font-medium tracking-widest text-gray-500">Key Features</p>
-        <ul className="mt-2 list-disc space-y-2 pl-5 text-sm text-gray-300">
-          {project.features.map((f) => (
-            <li key={f}>{f}</li>
+        <div className="mt-4">
+          <p className="text-xs font-medium tracking-widest text-gray-500">Key Features</p>
+          <ul className="mt-2 list-disc space-y-2 pl-5 text-sm text-gray-300">
+            {project.features.map((f) => (
+              <li key={f}>{f}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="mt-4 flex flex-wrap gap-2">
+          {project.tech.map((t) => (
+            <Badge key={t}>{t}</Badge>
           ))}
-        </ul>
-      </div>
+        </div>
 
-      <div className="mt-4 flex flex-wrap gap-2">
-        {project.tech.map((t) => (
-          <Badge key={t}>{t}</Badge>
-        ))}
-      </div>
-
-      <div className="mt-5 flex flex-col gap-2 sm:flex-row">
-        {project.links.map((l, idx) => (
-          <Button
-            key={l.href}
-            href={l.href}
-            target="_blank"
-            rel="noreferrer"
-            variant={idx === 0 ? "secondary" : "ghost"}
-            className="w-full sm:w-auto"
-          >
-            {l.label}
-          </Button>
-        ))}
-      </div>
-    </Card>
+        <div className="mt-5 flex flex-col gap-2 sm:flex-row">
+          {project.links.map((l, idx) => (
+            <Button
+              key={l.href}
+              href={l.href}
+              target="_blank"
+              rel="noreferrer"
+              variant={idx === 0 ? "secondary" : "ghost"}
+              className="w-full sm:w-auto"
+            >
+              {l.label}
+            </Button>
+          ))}
+        </div>
+      </Card>
+    </motion.div>
   );
 }
 
 export default function Projects() {
   const featured = projects.find((p) => p.featured);
   const rest = projects.filter((p) => !p.featured);
+  const reducedMotion = useReducedMotion();
 
   return (
     <Section id="projects" number="02" label="Projects">
@@ -161,14 +168,20 @@ export default function Projects() {
         scalable component-based architecture.
       </p>
 
-      <div className="mt-6 grid gap-4">
+      <motion.div
+        className="mt-6 grid gap-4"
+        initial={reducedMotion ? false : "hidden"}
+        whileInView="visible"
+        viewport={motionViewport}
+        variants={staggerContainerVariants}
+      >
         {featured && <ProjectCard project={featured} />}
         <div className="grid gap-4 sm:grid-cols-2">
           {rest.map((p) => (
             <ProjectCard key={p.name} project={p} />
           ))}
         </div>
-      </div>
+      </motion.div>
     </Section>
   );
 }

@@ -16,7 +16,7 @@ export default function Contact() {
             <p>
               <span className="text-gray-500">Email:</span>{" "}
               <a
-                className="text-white underline decoration-gray-700 underline-offset-4 hover:decoration-gray-400"
+                className="interactive-link text-white underline decoration-gray-700 underline-offset-4"
                 href={`mailto:${siteConfig.social.email}`}
               >
                 {siteConfig.social.email}
@@ -25,7 +25,7 @@ export default function Contact() {
             <p>
               <span className="text-gray-500">GitHub:</span>{" "}
               <a
-                className="text-white underline decoration-gray-700 underline-offset-4 hover:decoration-gray-400"
+                className="interactive-link text-white underline decoration-gray-700 underline-offset-4"
                 href={siteConfig.social.github}
                 target="_blank"
                 rel="noreferrer"
@@ -36,7 +36,7 @@ export default function Contact() {
             <p>
               <span className="text-gray-500">LinkedIn:</span>{" "}
               <a
-                className="text-white underline decoration-gray-700 underline-offset-4 hover:decoration-gray-400"
+                className="interactive-link text-white underline decoration-gray-700 underline-offset-4"
                 href={siteConfig.social.linkedin}
                 target="_blank"
                 rel="noreferrer"

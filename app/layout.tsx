@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import AmbientBackground from "@/components/AmbientBackground";
 import { siteConfig } from "@/lib/site";
 
 const fontSans = Inter({
@@ -56,14 +57,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${fontSans.variable} ${fontMono.variable}`}>
-      <body className="bg-black text-gray-200 antialiased">
+      <body className="min-h-dvh overflow-x-hidden bg-[var(--background)] text-gray-200 antialiased selection:bg-white/10 selection:text-white">
+        <AmbientBackground />
         <a
           href="#content"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-white focus:px-3 focus:py-2 focus:text-sm focus:font-medium focus:text-black"
         >
           Skip to content
         </a>
-        {children}
+        <div className="relative z-10">{children}</div>
       </body>
     </html>
   );

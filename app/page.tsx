@@ -14,9 +14,9 @@ import Container from "@/components/ui/Container";
 
 export default function Home() {
   return (
-    <div id="top" className="min-h-dvh bg-black">
+    <div id="top" className="relative min-h-dvh">
       <Navbar />
-      <main id="content" className="pb-12 pt-10 sm:pt-14">
+      <main id="content" className="relative pb-14 pt-10 sm:pb-20 sm:pt-14">
         <Container>
           <Hero />
           <About />

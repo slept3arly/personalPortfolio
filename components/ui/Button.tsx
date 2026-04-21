@@ -1,3 +1,8 @@
+"use client";
+
+import { motion, useReducedMotion } from "framer-motion";
+import { buttonHoverMotion } from "@/lib/motion";
+
 type Variant = "primary" | "secondary" | "ghost";
 
 type Props = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
@@ -14,15 +19,22 @@ const variants: Record<Variant, string> = {
 };
 
 export default function Button({ className, variant = "primary", ...props }: Props) {
+  const { children, ...rest } = props;
+  const reducedMotion = useReducedMotion();
+
   return (
-    <a
-      {...props}
+    <motion.a
+      {...rest}
+      whileHover={reducedMotion ? undefined : buttonHoverMotion}
+      whileFocus={reducedMotion ? undefined : buttonHoverMotion}
       className={[
-        "inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition",
+        "interactive-surface interactive-button inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium",
         variants[variant],
         className ?? "",
       ].join(" ")}
-    />
+    >
+      <span className="relative z-10">{children}</span>
+    </motion.a>
   );
 }
 
