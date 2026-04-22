@@ -1,3 +1,5 @@
+import AnimatedHeading from "./AnimatedHeading";
+
 type Props = {
   id?: string;
   label: string;
@@ -16,8 +18,22 @@ export default function Section({ id, label, number, children, className }: Prop
       <div className="space-y-10 md:space-y-12">
         <header className="flex items-end gap-6">
           <div className="space-y-3">
-            <p className="text-xs font-semibold tracking-[0.16em] text-slate-500">{number}</p>
-            <h2 className="text-2xl font-semibold tracking-tight text-white md:text-3xl">{label}</h2>
+            <AnimatedHeading
+              as="p"
+              by="char"
+              stagger={0.02}
+              className="text-xs font-semibold tracking-[0.16em] text-slate-500"
+            >
+              {number}
+            </AnimatedHeading>
+            <AnimatedHeading
+              as="h2"
+              by="word"
+              stagger={0.045}
+              className="text-2xl font-semibold tracking-tight text-white md:text-3xl"
+            >
+              {label}
+            </AnimatedHeading>
           </div>
           <div className="hidden h-px flex-1 bg-[color:var(--surface-border)] sm:block" />
         </header>

@@ -1,5 +1,7 @@
 import Card from "./ui/Card";
 import Section from "./ui/Section";
+import AnimatedCascade from "./ui/AnimatedCascade";
+import AnimatedHeading from "./ui/AnimatedHeading";
 
 type Item = {
   title: string;
@@ -28,17 +30,18 @@ const items: Item[] = [
 export default function Certifications() {
   return (
     <Section id="certifications" number="07" label="Achievements & certifications">
-      <div className="grid gap-4 sm:grid-cols-2">
+      <AnimatedCascade className="grid gap-4 sm:grid-cols-2" stagger={0.1}>
         {items.map((x) => (
           <Card key={`${x.title}-${x.issuer}`}>
             <p className="text-xs font-medium tracking-widest text-gray-500">{x.year}</p>
-            <h3 className="mt-2 text-base font-semibold text-white">{x.title}</h3>
+            <AnimatedHeading className="mt-2 text-base font-semibold text-white">
+              {x.title}
+            </AnimatedHeading>
             <p className="mt-1 text-sm text-gray-400">{x.issuer}</p>
             <p className="mt-3 text-sm leading-relaxed text-gray-300">{x.detail}</p>
           </Card>
         ))}
-      </div>
+      </AnimatedCascade>
     </Section>
   );
 }
-

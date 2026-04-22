@@ -1,11 +1,13 @@
 import Badge from "./ui/Badge";
 import Card from "./ui/Card";
+import AnimatedCascade from "./ui/AnimatedCascade";
 import Section from "./ui/Section";
+import AnimatedHeading from "./ui/AnimatedHeading";
 
 export default function About() {
   return (
     <Section id="about" number="01" label="About">
-      <div className="grid gap-4 sm:grid-cols-3">
+      <AnimatedCascade className="grid gap-4 sm:grid-cols-3" stagger={0.12}>
         <Card className="sm:col-span-2">
           <p className="text-sm leading-relaxed text-gray-300">
             I’m a developer focused on building{" "}
@@ -21,7 +23,7 @@ export default function About() {
         </Card>
 
         <Card>
-          <h3 className="text-sm font-semibold text-white">Focus areas</h3>
+          <AnimatedHeading className="text-sm font-semibold text-white">Focus areas</AnimatedHeading>
           <ul className="mt-3 space-y-2 text-sm text-gray-300">
             <li>Component-driven UI & design systems</li>
             <li>Responsive layouts and accessibility</li>
@@ -35,8 +37,7 @@ export default function About() {
             <Badge>Tailwind</Badge>
           </div>
         </Card>
-      </div>
+      </AnimatedCascade>
     </Section>
   );
 }
-

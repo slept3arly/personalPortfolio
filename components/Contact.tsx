@@ -1,20 +1,32 @@
 import Button from "./ui/Button";
 import Card from "./ui/Card";
 import Section from "./ui/Section";
+import AnimatedCascade from "./ui/AnimatedCascade";
+import AnimatedHeading from "./ui/AnimatedHeading";
 import { siteConfig } from "@/lib/site";
 
 export default function Contact() {
   return (
     <Section id="contact" number="09" label="Contact">
       <Card>
-        <div className="grid gap-8 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] md:items-start">
+        <AnimatedCascade
+          className="grid gap-8 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] md:items-start"
+          stagger={0.12}
+        >
           <div className="space-y-8">
             <header className="max-w-2xl space-y-4">
-              <h3 className="text-2xl font-semibold tracking-tight text-white">Let’s build something useful</h3>
-              <p className="max-w-xl text-sm leading-7 text-slate-300">
+              <AnimatedHeading className="text-2xl font-semibold tracking-tight text-white">
+                Let’s build something useful
+              </AnimatedHeading>
+              <AnimatedHeading
+                as="p"
+                by="word"
+                stagger={0.013}
+                className="max-w-xl text-sm leading-7 text-slate-300"
+              >
                 If you&apos;re hiring or planning a product collaboration, I&apos;d be glad to connect. I typically
                 reply fastest by email.
-              </p>
+              </AnimatedHeading>
             </header>
 
             <ul className="space-y-5 text-sm text-slate-200">
@@ -72,7 +84,7 @@ export default function Contact() {
               LinkedIn
             </Button>
           </div>
-        </div>
+        </AnimatedCascade>
       </Card>
     </Section>
   );

@@ -1,6 +1,8 @@
 import Badge from "./ui/Badge";
 import Card from "./ui/Card";
 import Section from "./ui/Section";
+import AnimatedCascade from "./ui/AnimatedCascade";
+import AnimatedHeading from "./ui/AnimatedHeading";
 
 const skillGroups = [
   {
@@ -29,10 +31,10 @@ const skillGroups = [
 export default function Skills() {
   return (
     <Section id="skills" number="04" label="Skills">
-      <div className="grid gap-4 sm:grid-cols-3">
+      <AnimatedCascade className="grid gap-4 sm:grid-cols-3" stagger={0.1}>
         {skillGroups.map((g) => (
           <Card key={g.title}>
-            <h3 className="text-sm font-semibold text-white">{g.title}</h3>
+            <AnimatedHeading className="text-sm font-semibold text-white">{g.title}</AnimatedHeading>
             <p className="mt-2 text-sm leading-relaxed text-gray-400">{g.description}</p>
             <div className="mt-4 flex flex-wrap gap-2">
               {g.items.map((x) => (
@@ -41,8 +43,7 @@ export default function Skills() {
             </div>
           </Card>
         ))}
-      </div>
+      </AnimatedCascade>
     </Section>
   );
 }
-

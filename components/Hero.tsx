@@ -1,5 +1,7 @@
 import Badge from "./ui/Badge";
 import Button from "./ui/Button";
+import AnimatedHeading from "./ui/AnimatedHeading";
+import AnimatedCascade from "./ui/AnimatedCascade";
 
 export default function Hero() {
   return (
@@ -9,16 +11,26 @@ export default function Hero() {
           <Badge>Next.js • React • TypeScript</Badge>
         </div>
 
-        <h1 className="mt-6 text-balance text-5xl font-semibold tracking-[-0.02em] text-white md:text-6xl">
+        <AnimatedHeading
+          as="h1"
+          by="char"
+          stagger={0.028}
+          className="mt-6 text-balance text-5xl font-semibold tracking-[-0.02em] text-white md:text-6xl"
+        >
           Vinayak Nautiyal
-        </h1>
-        <p className="mx-auto mt-6 max-w-2xl text-pretty text-base leading-8 text-slate-300 md:text-lg">
+        </AnimatedHeading>
+        <AnimatedHeading
+          as="p"
+          by="word"
+          stagger={0.014}
+          className="mx-auto mt-6 max-w-2xl text-pretty text-base leading-8 text-slate-300 md:text-lg"
+        >
           I build modern, performance-focused web apps with clean UI, practical UX, and production-grade
           structure. I enjoy shipping polished experiences end-to-end — from component design to
           integration and deployment.
-        </p>
+        </AnimatedHeading>
 
-        <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row sm:items-center">
+        <AnimatedCascade className="mt-10 flex flex-col justify-center gap-3 sm:flex-row sm:items-center" stagger={0.08}>
           <Button href="#projects">View projects</Button>
           <Button href="/resume.pdf" target="_blank" rel="noreferrer" variant="secondary">
             Resume
@@ -34,7 +46,7 @@ export default function Hero() {
           >
             LinkedIn
           </Button>
-        </div>
+        </AnimatedCascade>
       </div>
     </section>
   );

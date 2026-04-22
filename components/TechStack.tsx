@@ -1,6 +1,8 @@
 import Badge from "./ui/Badge";
 import Card from "./ui/Card";
 import Section from "./ui/Section";
+import AnimatedCascade from "./ui/AnimatedCascade";
+import AnimatedHeading from "./ui/AnimatedHeading";
 
 const frontend = ["Next.js", "React", "TypeScript", "Tailwind CSS", "HTML", "CSS"];
 const backend = ["Node.js", "Express (placeholder)", "REST APIs", "Auth (JWT/session)"];
@@ -19,9 +21,9 @@ function PillList({ items }: { items: string[] }) {
 export default function TechStack() {
   return (
     <Section id="tech-stack" number="03" label="Tech stack">
-      <div className="grid gap-4 sm:grid-cols-3">
+      <AnimatedCascade className="grid gap-4 sm:grid-cols-3" stagger={0.1}>
         <Card>
-          <h3 className="text-sm font-semibold text-white">Frontend</h3>
+          <AnimatedHeading className="text-sm font-semibold text-white">Frontend</AnimatedHeading>
           <p className="mt-2 text-sm leading-relaxed text-gray-400">
             UI engineering focused on accessibility, performance, and component-driven design.
           </p>
@@ -30,7 +32,7 @@ export default function TechStack() {
           </div>
         </Card>
         <Card>
-          <h3 className="text-sm font-semibold text-white">Backend</h3>
+          <AnimatedHeading className="text-sm font-semibold text-white">Backend</AnimatedHeading>
           <p className="mt-2 text-sm leading-relaxed text-gray-400">
             Building clean APIs and integrating real-world services (payments, email, storage).
           </p>
@@ -39,7 +41,7 @@ export default function TechStack() {
           </div>
         </Card>
         <Card>
-          <h3 className="text-sm font-semibold text-white">Tools</h3>
+          <AnimatedHeading className="text-sm font-semibold text-white">Tools</AnimatedHeading>
           <p className="mt-2 text-sm leading-relaxed text-gray-400">
             Practical tooling for shipping, debugging, and collaborating in teams.
           </p>
@@ -47,8 +49,7 @@ export default function TechStack() {
             <PillList items={tools} />
           </div>
         </Card>
-      </div>
+      </AnimatedCascade>
     </Section>
   );
 }
-

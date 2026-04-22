@@ -1,6 +1,8 @@
 import Badge from "./ui/Badge";
 import Card from "./ui/Card";
 import Section from "./ui/Section";
+import AnimatedCascade from "./ui/AnimatedCascade";
+import AnimatedHeading from "./ui/AnimatedHeading";
 
 type ExperienceItem = {
   role: string;
@@ -45,12 +47,14 @@ const experience: ExperienceItem[] = [
 export default function Experience() {
   return (
     <Section id="experience" number="05" label="Experience">
-      <div className="grid gap-4">
+      <AnimatedCascade className="grid gap-4" stagger={0.1}>
         {experience.map((item) => (
           <Card key={`${item.company}-${item.role}`}>
             <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
               <div>
-                <h3 className="text-base font-semibold text-white">{item.role}</h3>
+                <AnimatedHeading className="text-base font-semibold text-white">
+                  {item.role}
+                </AnimatedHeading>
                 <p className="mt-1 text-sm text-gray-400">
                   {item.company} · {item.location}
                 </p>
@@ -73,8 +77,7 @@ export default function Experience() {
             </div>
           </Card>
         ))}
-      </div>
+      </AnimatedCascade>
     </Section>
   );
 }
-

@@ -2,6 +2,8 @@ import Badge from "./ui/Badge";
 import Button from "./ui/Button";
 import Card from "./ui/Card";
 import Section from "./ui/Section";
+import AnimatedCascade from "./ui/AnimatedCascade";
+import AnimatedHeading from "./ui/AnimatedHeading";
 
 type ProjectLink = { label: string; href: string };
 
@@ -96,7 +98,9 @@ function ProjectCard({ project }: { project: Project }) {
         <div className="flex items-start justify-between gap-4">
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <h3 className="text-base font-semibold text-white">{project.name}</h3>
+              <AnimatedHeading className="text-base font-semibold text-white">
+                {project.name}
+              </AnimatedHeading>
               {project.featured && (
                 <span className="rounded-full border border-gray-700 bg-white/5 px-2.5 py-0.5 text-xs text-gray-200">
                   Featured
@@ -158,20 +162,19 @@ export default function Projects() {
 
   return (
     <Section id="projects" number="02" label="Projects">
-      <p className="max-w-3xl text-sm leading-relaxed text-gray-400">
+      <AnimatedHeading as="p" by="word" stagger={0.013} className="max-w-3xl text-sm leading-relaxed text-gray-400">
         Selected projects demonstrating strong fundamentals in frontend development, UI design, and
         scalable component-based architecture.
-      </p>
+      </AnimatedHeading>
 
-      <div className="mt-8 grid gap-4 sm:gap-5">
+      <AnimatedCascade className="mt-8 grid gap-4 sm:gap-5" stagger={0.12}>
         {featured && <ProjectCard project={featured} />}
-        <div className="grid gap-4 sm:grid-cols-2 sm:gap-5">
+        <AnimatedCascade className="grid gap-4 sm:grid-cols-2 sm:gap-5" stagger={0.1}>
           {rest.map((p) => (
             <ProjectCard key={p.name} project={p} />
           ))}
-        </div>
-      </div>
+        </AnimatedCascade>
+      </AnimatedCascade>
     </Section>
   );
 }
-

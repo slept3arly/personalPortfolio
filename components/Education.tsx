@@ -1,6 +1,8 @@
 import Badge from "./ui/Badge";
 import Card from "./ui/Card";
 import Section from "./ui/Section";
+import AnimatedCascade from "./ui/AnimatedCascade";
+import AnimatedHeading from "./ui/AnimatedHeading";
 
 type EducationItem = {
   program: string;
@@ -29,12 +31,14 @@ const education: EducationItem[] = [
 export default function Education() {
   return (
     <Section id="education" number="06" label="Education">
-      <div className="grid gap-4">
+      <AnimatedCascade className="grid gap-4" stagger={0.1}>
         {education.map((item) => (
           <Card key={`${item.school}-${item.program}`}>
             <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
               <div>
-                <h3 className="text-base font-semibold text-white">{item.program}</h3>
+                <AnimatedHeading className="text-base font-semibold text-white">
+                  {item.program}
+                </AnimatedHeading>
                 <p className="mt-1 text-sm text-gray-400">{item.school}</p>
               </div>
               <p className="text-sm text-gray-500">
@@ -55,8 +59,7 @@ export default function Education() {
             </div>
           </Card>
         ))}
-      </div>
+      </AnimatedCascade>
     </Section>
   );
 }
-
