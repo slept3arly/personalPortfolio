@@ -1,26 +1,17 @@
-"use client";
-
-import { motion, useReducedMotion } from "framer-motion";
-import { cardHoverMotion } from "@/lib/motion";
-
 type Props = {
   children: React.ReactNode;
   className?: string;
 };
 
 export default function Card({ children, className }: Props) {
-  const reducedMotion = useReducedMotion();
-
   return (
-    <motion.div
-      whileHover={reducedMotion ? undefined : cardHoverMotion}
+    <div
       className={[
-        "interactive-surface interactive-card rounded-xl border border-gray-800/80 bg-gradient-to-b from-white/[0.04] via-white/[0.02] to-transparent p-6 shadow-sm",
+        "interactive-surface interactive-card flex h-full flex-col rounded-[var(--radius-lg)] border border-[color:var(--surface-border)] bg-[color:var(--surface)] p-6 shadow-[0_1px_2px_rgba(2,6,23,0.3)] md:p-7",
         className ?? "",
       ].join(" ")}
     >
-      <div className="relative z-10">{children}</div>
-    </motion.div>
+      {children}
+    </div>
   );
 }
-

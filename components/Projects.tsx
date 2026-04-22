@@ -1,7 +1,3 @@
-"use client";
-
-import { motion, useReducedMotion } from "framer-motion";
-import { motionViewport, projectCardVariants, staggerContainerVariants } from "@/lib/motion";
 import Badge from "./ui/Badge";
 import Button from "./ui/Button";
 import Card from "./ui/Card";
@@ -89,12 +85,12 @@ const projects: Project[] = [
 
 function ProjectCard({ project }: { project: Project }) {
   return (
-    <motion.div variants={projectCardVariants}>
+    <div className="h-full">
       <Card
         className={
           project.featured
-            ? "border-gray-700 bg-gradient-to-b from-white/[0.08] to-transparent ring-1 ring-white/10"
-            : undefined
+            ? "h-full border-gray-700/90 ring-1 ring-white/5"
+            : "flex h-full flex-col"
         }
       >
         <div className="flex items-start justify-between gap-4">
@@ -137,7 +133,7 @@ function ProjectCard({ project }: { project: Project }) {
           ))}
         </div>
 
-        <div className="mt-5 flex flex-col gap-2 sm:flex-row">
+        <div className="mt-auto flex flex-col gap-2 pt-5 sm:flex-row">
           {project.links.map((l, idx) => (
             <Button
               key={l.href}
@@ -152,14 +148,13 @@ function ProjectCard({ project }: { project: Project }) {
           ))}
         </div>
       </Card>
-    </motion.div>
+    </div>
   );
 }
 
 export default function Projects() {
   const featured = projects.find((p) => p.featured);
   const rest = projects.filter((p) => !p.featured);
-  const reducedMotion = useReducedMotion();
 
   return (
     <Section id="projects" number="02" label="Projects">
@@ -168,20 +163,14 @@ export default function Projects() {
         scalable component-based architecture.
       </p>
 
-      <motion.div
-        className="mt-6 grid gap-4"
-        initial={reducedMotion ? false : "hidden"}
-        whileInView="visible"
-        viewport={motionViewport}
-        variants={staggerContainerVariants}
-      >
+      <div className="mt-8 grid gap-4 sm:gap-5">
         {featured && <ProjectCard project={featured} />}
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2 sm:gap-5">
           {rest.map((p) => (
             <ProjectCard key={p.name} project={p} />
           ))}
         </div>
-      </motion.div>
+      </div>
     </Section>
   );
 }

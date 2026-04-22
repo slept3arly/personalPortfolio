@@ -1,8 +1,3 @@
-"use client";
-
-import { motion, useReducedMotion } from "framer-motion";
-import { buttonHoverMotion } from "@/lib/motion";
-
 type Variant = "primary" | "secondary" | "ghost";
 
 type Props = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
@@ -11,30 +6,26 @@ type Props = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
 
 const variants: Record<Variant, string> = {
   primary:
-    "bg-white text-black hover:bg-gray-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white",
+    "border-white bg-white text-slate-950 hover:border-white hover:bg-slate-100 focus-visible:outline-white",
   secondary:
-    "border border-gray-700 text-gray-200 hover:border-gray-500 hover:bg-white/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500",
+    "border-slate-700 bg-transparent text-slate-100 hover:border-slate-500 hover:bg-white/5 focus-visible:outline-slate-400",
   ghost:
-    "text-gray-300 hover:text-white hover:bg-white/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500",
+    "border-transparent bg-transparent text-slate-300 hover:text-white hover:bg-white/6 focus-visible:outline-slate-400",
 };
 
 export default function Button({ className, variant = "primary", ...props }: Props) {
   const { children, ...rest } = props;
-  const reducedMotion = useReducedMotion();
 
   return (
-    <motion.a
+    <a
       {...rest}
-      whileHover={reducedMotion ? undefined : buttonHoverMotion}
-      whileFocus={reducedMotion ? undefined : buttonHoverMotion}
       className={[
-        "interactive-surface interactive-button inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium",
+        "interactive-surface inline-flex h-11 items-center justify-center gap-2 rounded-[var(--radius-md)] border px-4 text-sm font-medium tracking-tight transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
         variants[variant],
         className ?? "",
       ].join(" ")}
     >
-      <span className="relative z-10">{children}</span>
-    </motion.a>
+      <span>{children}</span>
+    </a>
   );
 }
-

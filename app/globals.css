@@ -1,25 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  --background: #050607;
-  --foreground: #ededed;
-  --ambient-x: 50%;
-  --ambient-y: 30%;
-  --ambient-shift-x: 0px;
-  --ambient-shift-y: 0px;
-  --section-x: 50%;
-  --section-y: 120px;
-  --section-active: 0;
-  --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
-  --border-soft: rgba(148, 163, 184, 0.18);
-  --surface-soft: rgba(255, 255, 255, 0.04);
+  --background: #090d12;
+  --foreground: #f4f7fb;
+  --muted: #a3aebd;
+  --surface: rgba(15, 20, 29, 0.8);
+  --surface-border: rgba(100, 116, 139, 0.24);
+  --surface-border-strong: rgba(148, 163, 184, 0.42);
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 body {
   background:
-    radial-gradient(circle at 20% -10%, rgba(148, 163, 184, 0.08), transparent 28%),
-    radial-gradient(circle at 82% 0%, rgba(125, 211, 252, 0.05), transparent 24%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.01), transparent 28%),
+    radial-gradient(1300px 520px at 50% -10%, rgba(148, 163, 184, 0.09), transparent 60%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.1), transparent 24%),
     var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
@@ -30,199 +26,28 @@ html {
   scroll-behavior: smooth;
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(180deg, rgba(5, 6, 7, 0) 0%, rgba(5, 6, 7, 0.3) 45%, rgba(5, 6, 7, 0.72) 100%);
-  z-index: 1;
-}
-
-.ambient-background {
-  position: fixed;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.ambient-orb,
-.ambient-grid,
-.ambient-dots,
-.ambient-cursor,
-.ambient-noise {
-  position: absolute;
-  inset: -10%;
-}
-
-.ambient-orb {
-  filter: blur(80px);
-  opacity: 0.45;
-  transform: translate3d(var(--ambient-shift-x), var(--ambient-shift-y), 0);
-  transition: transform 700ms var(--ease-premium);
-}
-
-.ambient-orb-primary {
-  background: radial-gradient(circle at 18% 22%, rgba(191, 219, 254, 0.13), transparent 42%);
-  animation: ambientFloatPrimary 24s var(--ease-premium) infinite alternate;
-}
-
-.ambient-orb-secondary {
-  background: radial-gradient(circle at 78% 16%, rgba(125, 211, 252, 0.09), transparent 34%);
-  animation: ambientFloatSecondary 30s var(--ease-premium) infinite alternate;
-}
-
-.ambient-grid {
-  background-image:
-    linear-gradient(to right, rgba(148, 163, 184, 0.08) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(148, 163, 184, 0.07) 1px, transparent 1px);
-  background-position: center center;
-  background-size: 72px 72px;
-  mask-image: radial-gradient(circle at center, black 28%, transparent 82%);
-  opacity: 0.16;
-  transform: translate3d(calc(var(--ambient-shift-x) * 0.6), calc(var(--ambient-shift-y) * 0.6), 0);
-  animation: ambientGridDrift 28s linear infinite;
-}
-
-.ambient-dots {
-  background-image: radial-gradient(circle, rgba(226, 232, 240, 0.34) 1px, transparent 1.6px);
-  background-position: center center;
-  background-size: 28px 28px;
-  mask-image: radial-gradient(circle at center, black 22%, transparent 78%);
-  opacity: 0.08;
-  transform: translate3d(calc(var(--ambient-shift-x) * 1.1), calc(var(--ambient-shift-y) * 1.1), 0);
-  animation: ambientDotsDrift 22s var(--ease-premium) infinite alternate;
-}
-
-.ambient-cursor {
-  inset: -20%;
-  background:
-    radial-gradient(520px circle at var(--ambient-x) var(--ambient-y), rgba(226, 232, 240, 0.08), transparent 62%),
-    radial-gradient(860px circle at var(--ambient-x) var(--ambient-y), rgba(125, 211, 252, 0.04), transparent 72%);
-  opacity: 0.9;
-}
-
-.ambient-noise {
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-  background-size: 3px 3px;
-  opacity: 0.05;
-  mix-blend-mode: soft-light;
-}
-
 .interactive-section {
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
-  --section-active: 0;
-}
-
-.interactive-section::before,
-.interactive-section::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 1.75rem;
-  pointer-events: none;
-}
-
-.interactive-section::before {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 36%),
-    radial-gradient(120% 110% at 50% 0%, rgba(148, 163, 184, 0.06), transparent 60%);
-  border: 1px solid rgba(148, 163, 184, 0);
-  opacity: 0.45;
-  transform: scale(0.995);
-  transition:
-    opacity 500ms var(--ease-premium),
-    transform 650ms var(--ease-premium),
-    border-color 500ms var(--ease-premium);
-}
-
-.interactive-section::after {
-  inset: -1px;
-  background:
-    radial-gradient(320px circle at var(--section-x) var(--section-y), rgba(226, 232, 240, 0.11), transparent 70%),
-    radial-gradient(520px circle at var(--section-x) var(--section-y), rgba(125, 211, 252, 0.05), transparent 78%);
-  opacity: calc(var(--section-active) * 1);
-  transition: opacity 320ms ease-out;
-}
-
-.interactive-section:hover::before {
-  opacity: 0.95;
-  transform: scale(1);
-  border-color: rgba(148, 163, 184, 0.12);
+  scroll-margin-top: 6rem;
 }
 
 .interactive-surface {
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
   transition:
-    transform 500ms var(--ease-premium),
-    border-color 500ms var(--ease-premium),
-    background-color 500ms var(--ease-premium),
-    box-shadow 500ms var(--ease-premium),
-    color 280ms var(--ease-premium);
-  will-change: transform;
-}
-
-.interactive-surface::before,
-.interactive-surface::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.interactive-surface::before {
-  background:
-    radial-gradient(140% 120% at 0% 0%, rgba(255, 255, 255, 0.14), transparent 38%),
-    linear-gradient(135deg, rgba(148, 163, 184, 0.1), transparent 44%, rgba(255, 255, 255, 0.08));
-  opacity: 0;
-  transform: scale(1.06);
-  transition:
-    opacity 500ms var(--ease-premium),
-    transform 700ms var(--ease-premium);
-}
-
-.interactive-surface::after {
-  inset: 1px;
-  border-radius: inherit;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 28%);
-  opacity: 0;
-  transition: opacity 400ms var(--ease-premium);
+    transform 180ms var(--ease-standard),
+    border-color 180ms var(--ease-standard),
+    background-color 180ms var(--ease-standard),
+    box-shadow 180ms var(--ease-standard),
+    color 180ms var(--ease-standard);
 }
 
 .interactive-surface:hover,
 .interactive-surface:focus-visible {
-  border-color: rgba(148, 163, 184, 0.24);
-}
-
-.interactive-surface:hover::before,
-.interactive-surface:hover::after,
-.interactive-surface:focus-visible::before,
-.interactive-surface:focus-visible::after {
-  opacity: 1;
-  transform: scale(1);
+  border-color: var(--surface-border-strong);
 }
 
 .interactive-card:hover,
 .interactive-card:focus-within {
-  border-color: rgba(148, 163, 184, 0.22);
-  box-shadow:
-    0 24px 55px rgba(0, 0, 0, 0.34),
-    0 0 0 1px rgba(255, 255, 255, 0.025);
-}
-
-.interactive-button:hover,
-.interactive-button:focus-visible {
-  box-shadow:
-    0 16px 34px rgba(0, 0, 0, 0.26),
-    0 0 0 1px rgba(255, 255, 255, 0.05);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(2, 6, 23, 0.18);
 }
 
 .interactive-link {
@@ -231,74 +56,20 @@ body::before {
   align-items: center;
   color: inherit;
   transition:
-    color 260ms var(--ease-premium),
-    text-shadow 260ms var(--ease-premium);
+    color 180ms var(--ease-standard),
+    opacity 180ms var(--ease-standard),
+    border-color 180ms var(--ease-standard);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.28);
 }
 
 .interactive-link::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -0.22rem;
-  width: 100%;
-  height: 1px;
-  background: linear-gradient(90deg, rgba(226, 232, 240, 0.18), rgba(226, 232, 240, 0.85), rgba(226, 232, 240, 0.18));
-  opacity: 0.32;
-  transform: scaleX(0.34);
-  transform-origin: left;
-  transition:
-    transform 380ms var(--ease-premium),
-    opacity 320ms var(--ease-premium);
+  content: none;
 }
 
 .interactive-link:hover,
 .interactive-link:focus-visible {
-  color: #f8fafc;
-  text-shadow: 0 0 18px rgba(226, 232, 240, 0.08);
-}
-
-.interactive-link:hover::after,
-.interactive-link:focus-visible::after {
-  opacity: 0.92;
-  transform: scaleX(1);
-}
-
-@keyframes ambientFloatPrimary {
-  from {
-    transform: translate3d(calc(var(--ambient-shift-x) * 0.65), calc(var(--ambient-shift-y) * 0.65), 0) scale(1);
-  }
-  to {
-    transform: translate3d(calc(var(--ambient-shift-x) * 1.1 + 18px), calc(var(--ambient-shift-y) * 0.85 + 22px), 0)
-      scale(1.08);
-  }
-}
-
-@keyframes ambientFloatSecondary {
-  from {
-    transform: translate3d(calc(var(--ambient-shift-x) * 0.45), calc(var(--ambient-shift-y) * 0.45), 0) scale(1);
-  }
-  to {
-    transform: translate3d(calc(var(--ambient-shift-x) * 0.8 - 14px), calc(var(--ambient-shift-y) * 0.9 + 18px), 0)
-      scale(1.06);
-  }
-}
-
-@keyframes ambientGridDrift {
-  from {
-    transform: translate3d(calc(var(--ambient-shift-x) * 0.55), calc(var(--ambient-shift-y) * 0.55), 0);
-  }
-  to {
-    transform: translate3d(calc(var(--ambient-shift-x) * 0.55 - 18px), calc(var(--ambient-shift-y) * 0.55 - 24px), 0);
-  }
-}
-
-@keyframes ambientDotsDrift {
-  from {
-    transform: translate3d(calc(var(--ambient-shift-x) * 0.95), calc(var(--ambient-shift-y) * 0.95), 0);
-  }
-  to {
-    transform: translate3d(calc(var(--ambient-shift-x) * 1.15 + 16px), calc(var(--ambient-shift-y) * 1.15 - 12px), 0);
-  }
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.58);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -306,17 +77,8 @@ body::before {
     scroll-behavior: auto;
   }
 
-  .ambient-orb,
-  .ambient-grid,
-  .ambient-dots,
-  .interactive-section::before,
-  .interactive-section::after,
   .interactive-surface,
-  .interactive-surface::before,
-  .interactive-surface::after,
-  .interactive-link,
-  .interactive-link::after {
-    animation: none !important;
+  .interactive-link {
     transition-duration: 0ms !important;
   }
 }

@@ -2,14 +2,16 @@ import { siteConfig } from "@/lib/site";
 
 export default function Footer() {
   return (
-    <footer className="mt-10 border-t border-gray-900/60 py-8 text-sm">
+    <footer className="mt-16 border-t border-[color:var(--surface-border)] py-10 text-sm md:mt-20">
       <div className="flex flex-col items-center justify-between gap-3 sm:flex-row">
-        <p className="text-gray-500">© {new Date().getFullYear()} {siteConfig.name}</p>
-        <div className="flex items-center gap-4 text-gray-500">
+        <p className="text-slate-500">
+          © {new Date().getFullYear()} {siteConfig.name}
+        </p>
+        <div className="flex items-center gap-4 text-slate-500">
           <a className="interactive-link" href="#top">
             Back to top
           </a>
-          <span className="text-gray-800" aria-hidden="true">
+          <span className="text-slate-700" aria-hidden="true">
             •
           </span>
           <a
@@ -33,4 +35,3 @@ export default function Footer() {
     </footer>
   );
 }
-
