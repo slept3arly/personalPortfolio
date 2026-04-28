@@ -1,34 +1,72 @@
-## Personal Portfolio (Next.js)
+# Personal Portfolio
 
-Recruiter-friendly personal portfolio built with Next.js (App Router), React, TypeScript, and Tailwind CSS.
+Personal portfolio website showcasing backend systems, full-stack applications, and exploratory projects across data and machine learning.
 
-## Tech stack
+---
+
+## Overview
+
+This portfolio serves as a central hub to present:
+
+- Full-stack and backend-focused projects
+- Systems and data processing work
+- Exploratory work in machine learning and analytics
+- Ongoing technical direction toward backend systems and security
+
+---
+
+## Live Website
+
+👉 https://your-portfolio-link.com
+
+---
+
+## Featured Projects
+
+### Primary Work
+
+- **Vedic Wellness**  
+  Full-stack e-commerce platform with authentication, RBAC, OTP verification, and secure backend workflows.
+
+- **InsightRush**  
+  Approximate query processing engine using FastAPI and DuckDB with sampling-based analytics and exact vs approximate query execution.
+
+---
+
+### Exploratory / In Progress
+
+- **PayParse**  
+  Transaction parsing and merchant enrichment pipeline for Google Pay data with feature engineering and API-based classification.
+
+- **Hybrid CNN Face Recognition**  
+  Experimental implementation combining dimensionality reduction and CNN-based feature extraction for face recognition tasks.
+
+---
+
+## Tech Stack
 
 - **Framework**: Next.js (App Router)
-- **UI**: React + Tailwind CSS
 - **Language**: TypeScript
-- **Deploy**: Vercel
+- **UI**: React + Tailwind CSS
+- **Deployment**: Vercel
 
-## Running locally
+---
 
-```bash
-npm install
-npm run dev
-```
+## Purpose
 
-Open `http://localhost:3000`.
+- Provide recruiters a structured view of all projects
+- Highlight both completed systems and exploratory work
+- Serve as a continuously evolving technical portfolio
 
-## Production build
+---
 
-```bash
-npm run build
-npm run start
-```
+## Status
 
-## Customization checklist
+- Actively maintained
+- Projects and content being refined
 
-- **Site URL (SEO)**: update `lib/site.ts` (`siteConfig.url`) before deploying.
-- **Env**: copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_SITE_URL`.
-- **Resume**: replace `public/resume.pdf`.
-- **Content**: update project/experience placeholders in `components/`.
+---
 
+## Notes
+
+This repository contains the source code for the portfolio website.
