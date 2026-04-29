@@ -15,7 +15,7 @@ export default function Home() {
     <div id="top" className="relative min-h-dvh">
       <Navbar />
 
-      <main id="content" className="relative pb-20 pt-8 md:pb-24 md:pt-10">
+      <main id="content" className="relative pb-16 pt-4 md:pb-20 md:pt-6">
         <Container>
           <Hero />
 
