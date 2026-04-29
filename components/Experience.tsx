@@ -16,30 +16,18 @@ type ExperienceItem = {
 
 const experience: ExperienceItem[] = [
   {
-    role: "Frontend Developer Intern (Placeholder)",
-    company: "Company Name",
-    location: "Remote / On-site",
-    start: "Jun 2025",
-    end: "Aug 2025",
-    tags: ["Next.js", "React", "Tailwind", "REST APIs"],
-    bullets: [
-      "Built and shipped responsive UI screens with reusable components and consistent styling.",
-      "Integrated frontend with API endpoints, handling loading/error states and edge cases cleanly.",
-      "Improved perceived performance by optimizing rendering and reducing layout shift.",
-      "Collaborated with a small team using GitHub PRs, code reviews, and issue tracking.",
-    ],
-  },
-  {
-    role: "Freelance Web Developer (Placeholder)",
-    company: "Independent",
+    role: "Freelance Developer",
+    company: "Vedic Wellness",
     location: "Remote",
     start: "2024",
     end: "Present",
-    tags: ["Next.js", "SEO", "UI/UX", "Deployment"],
+    tags: ["Next.js", "PostgreSQL", "Prisma", "Docker", "Auth"],
     bullets: [
-      "Delivered small business landing pages with modern design, mobile-first layouts, and basic SEO.",
-      "Worked directly with stakeholders to translate requirements into a clear scope and timeline.",
-      "Deployed projects with repeatable build steps and simple content updates.",
+      "Developed and deployed a full-stack e-commerce platform for a real-world Ayurvedic business.",
+      "Architected backend using service-layer abstractions with Prisma ORM for structured and scalable data access.",
+      "Implemented authentication with RBAC, OTP-based verification, and rate limiting for secure user workflows.",
+      "Designed normalized database schema for products, users, and orders with transactional order processing.",
+      "Optimized performance using server-side rendering and cache revalidation for read-heavy traffic.",
     ],
   },
 ];

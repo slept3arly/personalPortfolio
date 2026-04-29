@@ -1,5 +1,4 @@
 import About from "@/components/About";
-import Certifications from "@/components/Certifications";
 import Contact from "@/components/Contact";
 import Education from "@/components/Education";
 import Experience from "@/components/Experience";
@@ -8,7 +7,6 @@ import Hero from "@/components/Hero";
 import Navbar from "@/components/Navbar";
 import Projects from "@/components/Projects";
 import Resume from "@/components/Resume";
-import Skills from "@/components/Skills";
 import TechStack from "@/components/TechStack";
 import Container from "@/components/ui/Container";
 
@@ -16,18 +14,30 @@ export default function Home() {
   return (
     <div id="top" className="relative min-h-dvh">
       <Navbar />
+
       <main id="content" className="relative pb-20 pt-8 md:pb-24 md:pt-10">
         <Container>
           <Hero />
+
+          {/* Who you are */}
           <About />
+
+          {/* What you’ve built (most important) */}
           <Projects />
+
+          {/* What you can work with */}
           <TechStack />
-          <Skills />
+
+          {/* Proof of work / depth */}
           <Experience />
+
+          {/* Academic context (secondary) */}
           <Education />
-          <Certifications />
+
+          {/* Action */}
           <Resume />
           <Contact />
+
           <Footer />
         </Container>
       </main>

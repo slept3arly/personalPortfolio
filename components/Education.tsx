@@ -15,15 +15,16 @@ type EducationItem = {
 
 const education: EducationItem[] = [
   {
-    program: "B.Tech in Computer Science (Placeholder)",
-    school: "University / Institute Name",
+    program: "B.Tech in Computer Science and Engineering",
+    school: "Vellore Institute of Technology (VIT), Vellore",
     start: "2024",
-    end: "2028",
-    tags: ["DSA", "OOP", "DBMS", "Networks", "OS"],
+    end: "Present",
+    tags: ["DSA", "OOP", "Computer Networks"],
     highlights: [
-      "Coursework: Data Structures & Algorithms, OOP, DBMS, Computer Networks, Operating Systems.",
-      "Built multiple web projects focused on component design, accessibility, and performance.",
-      "Active learning through hackathons / clubs (placeholder).",
+      "CGPA: 8.89 / 10.",
+      "Core coursework: Data Structures & Algorithms, OOP, Computer Networks",
+      "Focused on backend systems, data handling, and scalable application design through project-based learning.",
+      "Built multiple full-stack and system-oriented projects involving APIs, databases, and data pipelines.",
     ],
   },
 ];

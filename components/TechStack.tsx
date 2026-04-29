@@ -4,9 +4,40 @@ import Section from "./ui/Section";
 import AnimatedCascade from "./ui/AnimatedCascade";
 import AnimatedHeading from "./ui/AnimatedHeading";
 
-const frontend = ["Next.js", "React", "TypeScript", "Tailwind CSS", "HTML", "CSS"];
-const backend = ["Node.js", "Express (placeholder)", "REST APIs", "Auth (JWT/session)"];
-const tools = ["Git & GitHub", "Postman", "Vercel", "VS Code", "Figma (handoffs)", "Linux basics"];
+const frontend = [
+  "Next.js",
+  "React",
+  "TypeScript",
+  "Tailwind CSS",
+  "Component Architecture",
+];
+
+const backend = [
+  "Node.js",
+  "FastAPI",
+  "Flask",
+  "REST APIs",
+  "Authentication (JWT / sessions)",
+  "API Design",
+];
+
+const data = [
+  "PostgreSQL",
+  "SQLite",
+  "Pandas",
+  "Data Pipelines",
+  "Feature Engineering",
+  "Fuzzy Matching (RapidFuzz)",
+];
+
+const tools = [
+  "Git",
+  "GitHub",
+  "Postman",
+  "Docker (basics)",
+  "Linux",
+  "Vercel",
+];
 
 function PillList({ items }: { items: string[] }) {
   return (
@@ -21,34 +52,56 @@ function PillList({ items }: { items: string[] }) {
 export default function TechStack() {
   return (
     <Section id="tech-stack" number="03" label="Tech stack">
-      <AnimatedCascade className="grid gap-4 sm:grid-cols-3" stagger={0.1}>
+      <AnimatedCascade className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" stagger={0.1}>
+        
         <Card>
-          <AnimatedHeading className="text-sm font-semibold text-white">Frontend</AnimatedHeading>
+          <AnimatedHeading className="text-sm font-semibold text-white">
+            Frontend
+          </AnimatedHeading>
           <p className="mt-2 text-sm leading-relaxed text-gray-400">
-            UI engineering focused on accessibility, performance, and component-driven design.
+            Building clean, structured interfaces for system-driven applications.
           </p>
           <div className="mt-4">
             <PillList items={frontend} />
           </div>
         </Card>
+
         <Card>
-          <AnimatedHeading className="text-sm font-semibold text-white">Backend</AnimatedHeading>
+          <AnimatedHeading className="text-sm font-semibold text-white">
+            Backend
+          </AnimatedHeading>
           <p className="mt-2 text-sm leading-relaxed text-gray-400">
-            Building clean APIs and integrating real-world services (payments, email, storage).
+            Designing APIs, handling business logic, and structuring scalable services.
           </p>
           <div className="mt-4">
             <PillList items={backend} />
           </div>
         </Card>
+
         <Card>
-          <AnimatedHeading className="text-sm font-semibold text-white">Tools</AnimatedHeading>
+          <AnimatedHeading className="text-sm font-semibold text-white">
+            Data & Systems
+          </AnimatedHeading>
           <p className="mt-2 text-sm leading-relaxed text-gray-400">
-            Practical tooling for shipping, debugging, and collaborating in teams.
+            Working with structured data, pipelines, and analytical processing.
+          </p>
+          <div className="mt-4">
+            <PillList items={data} />
+          </div>
+        </Card>
+
+        <Card>
+          <AnimatedHeading className="text-sm font-semibold text-white">
+            Tools
+          </AnimatedHeading>
+          <p className="mt-2 text-sm leading-relaxed text-gray-400">
+            Tooling for development, debugging, and deployment workflows.
           </p>
           <div className="mt-4">
             <PillList items={tools} />
           </div>
         </Card>
+
       </AnimatedCascade>
     </Section>
   );

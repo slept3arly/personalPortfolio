@@ -15,37 +15,53 @@ const fontMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
+
   title: {
-    default: siteConfig.title,
-    template: `%s | ${siteConfig.name}`,
+    default: "Vinayak Nautiyal | Full Stack & Systems Developer",
+    template: `%s | Vinayak Nautiyal`,
   },
-  description: siteConfig.description,
-  applicationName: siteConfig.title,
-  authors: [{ name: siteConfig.name }],
-  creator: siteConfig.name,
+
+  description:
+    "Full-stack developer focused on backend systems, data pipelines, and scalable web applications. Experience building production-oriented architectures and analytical systems.",
+
+  applicationName: "Vinayak Nautiyal Portfolio",
+
+  authors: [{ name: "Vinayak Nautiyal" }],
+  creator: "Vinayak Nautiyal",
+
   keywords: [
-    "Frontend Developer",
+    "Full Stack Developer",
+    "Backend Developer",
+    "Data Systems",
+    "Data Pipelines",
     "Next.js",
     "React",
     "TypeScript",
-    "Tailwind CSS",
+    "Python",
+    "FastAPI",
+    "Flask",
     "Portfolio",
   ],
+
   alternates: {
     canonical: "/",
   },
+
   openGraph: {
     type: "website",
     url: siteConfig.url,
-    title: siteConfig.title,
-    description: siteConfig.description,
-    siteName: siteConfig.title,
+    title: "Vinayak Nautiyal | Full Stack & Systems Developer",
+    description:
+      "Full-stack developer focused on backend systems, data pipelines, and scalable web applications.",
+    siteName: "Vinayak Nautiyal Portfolio",
     locale: siteConfig.locale,
   },
+
   twitter: {
     card: "summary",
-    title: siteConfig.title,
-    description: siteConfig.description,
+    title: "Vinayak Nautiyal | Full Stack & Systems Developer",
+    description:
+      "Backend systems, data pipelines, and full-stack applications.",
   },
 };
 
@@ -63,6 +79,7 @@ export default function RootLayout({
         >
           Skip to content
         </a>
+
         <div className="relative z-10">{children}</div>
       </body>
     </html>

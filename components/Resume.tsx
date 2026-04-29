@@ -10,26 +10,40 @@ export default function Resume() {
       <Card className="flex flex-col items-start justify-between gap-5 sm:flex-row sm:items-center">
         <div>
           <AnimatedHeading className="text-base font-semibold text-white">
-            Download my resume
+            Resume
           </AnimatedHeading>
+
           <AnimatedHeading
             as="p"
             by="word"
             stagger={0.012}
-            className="mt-2 text-sm leading-relaxed text-gray-400"
+            className="mt-2 text-sm leading-relaxed text-gray-400 max-w-md"
           >
-            A one-page overview of my skills, projects, and experience. Replace it anytime at
+            Concise overview of my work across backend systems, data pipelines, and full-stack
+            applications, including architecture decisions and implementation details.
           </AnimatedHeading>
-          <p className="mt-1 text-sm leading-relaxed text-gray-400">
-            <span className="font-mono text-gray-300">/public/resume.pdf</span>.
-          </p>
         </div>
-        <AnimatedCascade className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row" stagger={0.08}>
-          <Button href="/resume.pdf" target="_blank" rel="noreferrer" className="w-full sm:w-auto">
-            View PDF
+
+        <AnimatedCascade
+          className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row"
+          stagger={0.08}
+        >
+          <Button
+            href="/resume.pdf"
+            target="_blank"
+            rel="noreferrer"
+            className="w-full sm:w-auto"
+          >
+            View resume
           </Button>
-          <Button href="/resume.pdf" download variant="secondary" className="w-full sm:w-auto">
-            Download
+
+          <Button
+            href="/resume.pdf"
+            download
+            variant="secondary"
+            className="w-full sm:w-auto"
+          >
+            Download PDF
           </Button>
         </AnimatedCascade>
       </Card>

@@ -16,16 +16,18 @@ export default function Contact() {
           <div className="space-y-8">
             <header className="max-w-2xl space-y-4">
               <AnimatedHeading className="text-2xl font-semibold tracking-tight text-white">
-                Let’s build something useful
+                Open to backend, full-stack, and systems roles
               </AnimatedHeading>
+
               <AnimatedHeading
                 as="p"
                 by="word"
                 stagger={0.013}
                 className="max-w-xl text-sm leading-7 text-slate-300"
               >
-                If you&apos;re hiring or planning a product collaboration, I&apos;d be glad to connect. I typically
-                reply fastest by email.
+                I&apos;m currently looking for opportunities where I can work on real-world systems,
+                backend architecture, or data-driven applications. If you&apos;re hiring or building
+                something interesting, feel free to reach out.
               </AnimatedHeading>
             </header>
 
@@ -36,6 +38,7 @@ export default function Contact() {
                   {siteConfig.social.email}
                 </a>
               </li>
+
               <li className="grid gap-1">
                 <span className="text-xs font-semibold tracking-[0.14em] text-slate-500">GITHUB</span>
                 <a
@@ -47,6 +50,7 @@ export default function Contact() {
                   github.com/slept3arly
                 </a>
               </li>
+
               <li className="grid gap-1">
                 <span className="text-xs font-semibold tracking-[0.14em] text-slate-500">LINKEDIN</span>
                 <a
@@ -55,7 +59,7 @@ export default function Contact() {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  linkedin.com/in/vinayak-n-000a0b298
+                  linkedin.com/in/slept3arly
                 </a>
               </li>
             </ul>
@@ -65,6 +69,7 @@ export default function Contact() {
             <Button href={`mailto:${siteConfig.social.email}`} className="w-full md:w-52">
               Email me
             </Button>
+
             <Button
               href="/resume.pdf"
               target="_blank"
@@ -74,6 +79,7 @@ export default function Contact() {
             >
               View resume
             </Button>
+
             <Button
               href={siteConfig.social.linkedin}
               target="_blank"
