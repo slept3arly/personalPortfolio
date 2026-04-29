@@ -22,8 +22,83 @@ body {
     Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
 }
 
-html {
-  scroll-behavior: smooth;
+/* Only enable smooth scroll when the user hasn't requested reduced motion.
+   Unconditional scroll-behavior: smooth conflicts with GSAP ScrollTrigger on Safari. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+
+
+/* ─── Navbar ─────────────────────────────────────────────────── */
+
+/*
+  Outer pill: layout-only, never animated.
+  All sizing is driven by its flex children so there is
+  no explicit width/height that GSAP could accidentally thrash.
+*/
+.navbar-pill {
+  display: inline-flex;
+  border-radius: 9999px;
+}
+
+/*
+  Background layer: ONLY `opacity` is ever changed (by GSAP).
+  Opacity is GPU-composited — no layout, no paint, true 60 fps.
+  The entire frosted-glass look lives here and fades as one unit.
+*/
+.navbar-pill__bg {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: rgba(9, 13, 18, 0.80);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.32),
+    0 1px 0 rgba(255, 255, 255, 0.05) inset;
+  will-change: opacity;
+}
+
+/* Individual nav links */
+.nav-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.38rem 0.82rem;
+  border-radius: 9999px;
+  font-size: 0.855rem;
+  font-weight: 500;
+  letter-spacing: 0.012em;
+  color: rgba(203, 213, 225, 0.82);
+  white-space: nowrap;
+  transition:
+    color 160ms var(--ease-standard),
+    background-color 160ms var(--ease-standard);
+}
+
+.nav-link:hover,
+.nav-link:focus-visible {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.07);
+}
+
+.nav-link:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.38);
+  outline-offset: 2px;
+}
+
+/* Resume / CTA link — slightly highlighted by default */
+.nav-link--cta {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.nav-link--cta:hover,
+.nav-link--cta:focus-visible {
+  background-color: rgba(255, 255, 255, 0.11);
 }
 
 .interactive-section {
@@ -46,7 +121,9 @@ html {
 
 .interactive-card:hover,
 .interactive-card:focus-within {
-  transform: translateY(-1px);
+  /* Use standalone `translate` instead of `transform` so GSAP can own the
+     transform property on the same element without compositing conflicts */
+  translate: 0 -1px;
   box-shadow: 0 10px 24px rgba(2, 6, 23, 0.18);
 }
 
@@ -78,7 +155,11 @@ html {
   }
 
   .interactive-surface,
-  .interactive-link {
+  .interactive-link,
+  .interactive-card,
+  .nav-link {
     transition-duration: 0ms !important;
+    transition: none !important;
   }
 }
+

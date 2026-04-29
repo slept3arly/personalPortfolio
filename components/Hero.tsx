@@ -91,7 +91,7 @@ export default function Hero() {
   const descriptionSegments = description.split(/(\s+)/).filter(Boolean);
 
   return (
-    <section ref={rootRef} className="py-14 md:py-16" aria-label="Intro">
+    <section ref={rootRef} className="flex min-h-screen flex-col justify-center pt-28 pb-20 md:pt-36 md:pb-24" aria-label="Intro">
       <div className="mx-auto max-w-4xl text-center">
         <div ref={badgeRef} className="flex flex-wrap justify-center gap-2 opacity-0">
           <Badge>Backend Systems • Data Processing • Full-Stack Engineering</Badge>
