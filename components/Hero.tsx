@@ -182,7 +182,7 @@ export default function Hero() {
             style={{ opacity: 0, transform: "translateY(14px)" }}
           >
             <Button
-              href="https://www.linkedin.com/in/vinayak-n-000a0b298/"
+              href="https://www.linkedin.com/in/slept3arly/"
               target="_blank"
               rel="noreferrer"
               variant="ghost"

@@ -7,7 +7,7 @@ export const siteConfig = {
   locale: "en_US",
   social: {
     github: "https://github.com/slept3arly",
-    linkedin: "https://www.linkedin.com/in/vinayak-n-000a0b298/",
+    linkedin: "https://www.linkedin.com/in/slept3arly/",
     email: "vinayaknautiyal38@gmail.com",
   },
 } as const;
