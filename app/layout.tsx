@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import CustomCursor from "@/components/CustomCursor";
 import { siteConfig } from "@/lib/site";
 
 const fontSans = Inter({
@@ -18,12 +17,12 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
 
   title: {
-    default: "Vinayak Nautiyal | Full Stack & Systems Developer",
+    default: "Vinayak Nautiyal | Backend & Full-Stack Developer",
     template: `%s | Vinayak Nautiyal`,
   },
 
   description:
-    "Full-stack developer focused on backend systems, data pipelines, and scalable web applications. Experience building production-oriented architectures and analytical systems.",
+    "Third-year BTech student building backend services and full-stack tools across APIs, data processing, integrations, and system visualization.",
 
   applicationName: "Vinayak Nautiyal Portfolio",
 
@@ -31,8 +30,8 @@ export const metadata: Metadata = {
   creator: "Vinayak Nautiyal",
 
   keywords: [
-    "Full Stack Developer",
     "Backend Developer",
+    "Full-Stack Developer",
     "Data Systems",
     "Data Pipelines",
     "Next.js",
@@ -51,18 +50,18 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: siteConfig.url,
-    title: "Vinayak Nautiyal | Full Stack & Systems Developer",
+    title: "Vinayak Nautiyal | Backend & Full-Stack Developer",
     description:
-      "Full-stack developer focused on backend systems, data pipelines, and scalable web applications.",
+      "Third-year BTech student building backend services and full-stack tools across APIs, data processing, and integrations.",
     siteName: "Vinayak Nautiyal Portfolio",
     locale: siteConfig.locale,
   },
 
   twitter: {
     card: "summary",
-    title: "Vinayak Nautiyal | Full Stack & Systems Developer",
+    title: "Vinayak Nautiyal | Backend & Full-Stack Developer",
     description:
-      "Backend systems, data pipelines, and full-stack applications.",
+      "Backend services, data processing, integrations, and full-stack tools.",
   },
 };
 
@@ -81,7 +80,6 @@ export default function RootLayout({
           Skip to content
         </a>
 
-        <CustomCursor />
         <div className="relative z-10">{children}</div>
       </body>
     </html>

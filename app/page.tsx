@@ -1,4 +1,6 @@
 import About from "@/components/About";
+import BackgroundLight from "@/components/BackgroundLight";
+import Certifications from "@/components/Certifications";
 import Contact from "@/components/Contact";
 import Education from "@/components/Education";
 import Experience from "@/components/Experience";
@@ -13,6 +15,7 @@ import Container from "@/components/ui/Container";
 export default function Home() {
   return (
     <div id="top" className="relative min-h-dvh">
+      <BackgroundLight />
       <Navbar />
 
       <main id="content" className="relative pb-16 pt-4 md:pb-20 md:pt-6">
@@ -34,9 +37,11 @@ export default function Home() {
           {/* Academic context (secondary) */}
           <Education />
 
+          <Certifications />
+
           {/* Action */}
-          <Resume />
           <Contact />
+          <Resume />
 
           <Footer />
         </Container>

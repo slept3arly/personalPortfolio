@@ -1,11 +1,14 @@
+import { forwardRef } from "react";
+
 type Props = {
   children: React.ReactNode;
   className?: string;
 };
 
-export default function Card({ children, className }: Props) {
+const Card = forwardRef<HTMLDivElement, Props>(function Card({ children, className }, ref) {
   return (
     <div
+      ref={ref}
       className={[
         "interactive-surface interactive-card flex h-full flex-col rounded-[var(--radius-lg)] border border-[color:var(--surface-border)] bg-[color:var(--surface)] p-5 shadow-[0_1px_2px_rgba(2,6,23,0.3)] md:p-6",
         className ?? "",
@@ -14,4 +17,6 @@ export default function Card({ children, className }: Props) {
       {children}
     </div>
   );
-}
+});
+
+export default Card;

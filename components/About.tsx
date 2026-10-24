@@ -1,129 +1,94 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import gsap from "@/lib/gsap";
+import { useRef, useState } from "react";
 import Badge from "./ui/Badge";
 import Card from "./ui/Card";
 import Section from "./ui/Section";
-import { observeOnce } from "@/lib/observeOnce";
+import MagneticDots from "./ui/MagneticDots";
+import SplitHeading from "./ui/SplitHeading";
+import { motion } from "@/lib/motion";
+import { useReveal } from "@/lib/useReveal";
+
+const aboutIntroduction =
+  "I’m interested in building backend systems and full-stack applications, especially the workflows that connect APIs, data processing, and user-facing tools. I approach engineering by defining clear system boundaries, validating inputs and state changes, and keeping application logic dependable as integrations and data move through a product. My projects have included CRM connector workflows, a process-scheduling simulator and visualizer, transaction parsing, semantic caching, and desktop utilities. Across these different problem spaces, I value practical software whose behavior is understandable, maintainable, and useful to the people working with it.";
 
 export default function About() {
+  const [introductionExpanded, setIntroductionExpanded] = useState(false);
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const numberRef = useRef<HTMLParagraphElement | null>(null);
   const titleRef = useRef<HTMLHeadingElement | null>(null);
   const leftCardRef = useRef<HTMLDivElement | null>(null);
   const rightCardRef = useRef<HTMLDivElement | null>(null);
+  const focusItemRefs = useRef<Array<HTMLLIElement | null>>([]);
+  const tagRefs = useRef<Array<HTMLSpanElement | null>>([]);
 
-  useEffect(() => {
-    const root = sectionRef.current;
-    const number = numberRef.current;
-    const title = titleRef.current;
-    const leftCard = leftCardRef.current;
-    const rightCard = rightCardRef.current;
-
-    if (!root || !number || !title || !leftCard || !rightCard) {
-      return;
-    }
-
-    let stopReveal: (() => void) | undefined;
-
-    const ctx = gsap.context(() => {
-      gsap.set([number, title, leftCard, rightCard], {
-        opacity: 0,
-        y: 14,
-        scale: 0.985,
-      });
-
-      const tl = gsap.timeline({
-        paused: true,
-        defaults: {
-          duration: 0.8,
-          ease: "power2.out",
-        },
-      });
-
-      tl.to(number, { opacity: 1, y: 0, scale: 1, duration: 0.5 }, 0);
-      tl.to(title, { opacity: 1, y: 0, scale: 1, duration: 0.72 }, 0.06);
-      tl.to(leftCard, { opacity: 1, y: 0, scale: 1, duration: 0.78 }, 0.16);
-      tl.to(rightCard, { opacity: 1, y: 0, scale: 1, duration: 0.78 }, 0.24);
-
-      stopReveal = observeOnce(root, {
-        threshold: 0.2,
-        onEnter: () => tl.play(0),
-      });
-    }, root);
-
-    return () => {
-      stopReveal?.();
-      ctx.revert();
-    };
-  }, []);
+  useReveal(sectionRef, [
+    { targets: [numberRef], delay: motion.reveal.delay.number, duration: motion.duration.sectionNumber },
+    { targets: [leftCardRef, rightCardRef], stagger: motion.stagger.items },
+    { targets: focusItemRefs, delay: motion.reveal.delay.items, duration: motion.duration.sectionItem, stagger: motion.stagger.items, afterPrevious: true },
+    { targets: tagRefs, delay: motion.reveal.delay.tags, duration: motion.duration.sectionItem, stagger: motion.stagger.items, afterPrevious: true },
+  ]);
 
   return (
-    <Section id="about" ariaLabel="About">
-      <div ref={sectionRef} className="space-y-8 md:space-y-10">
-        <header className="flex items-end gap-4">
+    <Section id="about" ariaLabel="About" className="lg:-mx-6">
+      <div ref={sectionRef} className="space-y-5 md:space-y-6">
+        <MagneticDots><header className="flex items-end gap-4">
           <div className="space-y-2.5">
             <p
               ref={numberRef}
               className="text-xs font-semibold tracking-[0.18em] text-slate-500"
-              style={{ opacity: 0, transform: "translateY(14px) scale(0.985)" }}
             >
               01
             </p>
-            <h2
-              ref={titleRef}
+            <SplitHeading as="h2" ref={titleRef}
               className="text-2xl font-semibold tracking-tight text-white md:text-3xl"
-              style={{ opacity: 0, transform: "translateY(14px) scale(0.985)" }}
             >
               About
-            </h2>
+            </SplitHeading>
           </div>
           <div className="hidden h-px flex-1 bg-[color:var(--surface-border)] sm:block" />
-        </header>
+        </header></MagneticDots>
 
-        <div className="grid gap-4 sm:grid-cols-3">
-          <div ref={leftCardRef} className="sm:col-span-2" style={{ opacity: 0, transform: "translateY(14px) scale(0.985)" }}>
+        <div className="grid gap-4 md:grid-cols-[minmax(0,2fr)_minmax(16rem,1fr)]">
+          <div ref={leftCardRef}>
             <Card>
-              <div className="space-y-4 text-sm leading-relaxed text-gray-300">
-                <p>
-                  I’m a computer science student focused on building backend-heavy systems and full-stack applications
-                  that solve real-world problems. My work centers around designing structured architectures, handling
-                  data pipelines, and building systems that are not just functional, but scalable and logically sound.
-                </p>
-
-                <p>
-                  I’ve built systems including a full-stack e-commerce platform with authentication and role-based
-                  access control, a high-performance analytical engine for large-scale data queries, and machine
-                  learning pipelines for tasks like face recognition.
-                </p>
-
-                <p>
-                  I focus on understanding systems end-to-end from data ingestion and processing to API design,
-                  business logic, and deployment.
-                </p>
+              <div
+                id="about-introduction"
+                className={`${introductionExpanded ? "max-h-[100rem]" : "max-h-[8.125em]"} overflow-hidden text-sm leading-relaxed text-gray-300 transition-[max-height] duration-300 ease-out motion-reduce:transition-none md:max-h-none md:overflow-visible`}
+              >
+                <p className="max-w-[72ch]">{aboutIntroduction}</p>
               </div>
+              <button
+                type="button"
+                className="mt-3 inline-flex min-h-11 items-center text-sm font-medium text-slate-300 underline underline-offset-4 transition-colors hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-300 motion-reduce:transition-none md:hidden"
+                aria-expanded={introductionExpanded}
+                aria-controls="about-introduction"
+                onClick={() => setIntroductionExpanded((expanded) => !expanded)}
+              >
+                {introductionExpanded ? "Read less" : "Read more"}
+              </button>
             </Card>
           </div>
 
-          <div ref={rightCardRef} style={{ opacity: 0, transform: "translateY(14px) scale(0.985)" }}>
+          <div ref={rightCardRef}>
             <Card>
               <p className="text-sm font-semibold text-white">Focus areas</p>
 
               <ul className="mt-3 space-y-2 text-sm text-gray-300">
-                <li>Backend systems & API design</li>
-                <li>Data processing & analytical systems</li>
-                <li>Full-stack architecture (end-to-end systems)</li>
-                <li>Authentication, security & system design fundamentals</li>
+                {[
+                  "Backend systems & API design",
+                  "Data processing & analytical systems",
+                  "Full-stack application workflows",
+                  "Authentication, input validation, and integration safety",
+                ].map((focus, index) => (
+                  <li key={focus} ref={(node) => { focusItemRefs.current[index] = node; }}>{focus}</li>
+                ))}
               </ul>
 
               <div className="mt-4 flex flex-wrap gap-2">
-                <Badge>TypeScript</Badge>
-                <Badge>Python</Badge>
-                <Badge>PostgreSQL</Badge>
-                <Badge>Prisma</Badge>
-                <Badge>FastAPI</Badge>
-                <Badge>Next.js</Badge>
+                {["TypeScript", "Python", "PostgreSQL", "Prisma", "FastAPI", "Next.js"].map((tag, index) => (
+                  <span key={tag} ref={(node) => { tagRefs.current[index] = node; }}><Badge>{tag}</Badge></span>
+                ))}
               </div>
             </Card>
           </div>

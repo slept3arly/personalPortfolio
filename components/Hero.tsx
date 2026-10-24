@@ -1,200 +1,61 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import gsap from "@/lib/gsap";
+import { useRef } from "react";
 import Badge from "./ui/Badge";
 import Button from "./ui/Button";
+import { motion } from "@/lib/motion";
+import { useReveal } from "@/lib/useReveal";
+import { useCurtainReveal } from "@/lib/useCurtainReveal";
+
+const heroBadgeText = "Backend Services • Data Processing • Full-Stack Tools";
 
 export default function Hero() {
-  const rootRef = useRef<HTMLElement | null>(null);
+  const heroRef = useRef<HTMLElement | null>(null);
+  const headingRef = useRef<HTMLHeadingElement | null>(null);
   const badgeRef = useRef<HTMLDivElement | null>(null);
-  const titleRef = useRef<HTMLHeadingElement | null>(null);
-  const titleWords = useRef<Array<HTMLSpanElement | null>>([]);
   const descriptionRef = useRef<HTMLParagraphElement | null>(null);
-  const descriptionWords = useRef<Array<HTMLSpanElement | null>>([]);
-  const ctaRef = useRef<HTMLDivElement | null>(null);
-  const ctaItems = useRef<Array<HTMLDivElement | null>>([]);
-  const noteRef = useRef<HTMLParagraphElement | null>(null);
+  const actionsRef = useRef<HTMLDivElement | null>(null);
+  const linksRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    const root = rootRef.current;
-    const badge = badgeRef.current;
-    const title = titleRef.current;
-    const description = descriptionRef.current;
-    const cta = ctaRef.current;
-    const note = noteRef.current;
+  useCurtainReveal(headingRef);
 
-    if (!root || !badge || !title || !description || !cta || !note) {
-      return;
-    }
-
-    const titleItems = titleWords.current.filter((item): item is HTMLSpanElement => Boolean(item));
-    const descriptionItems = descriptionWords.current.filter((item): item is HTMLSpanElement => Boolean(item));
-    const actionItems = ctaItems.current.filter((item): item is HTMLDivElement => Boolean(item));
-
-    const ctx = gsap.context(() => {
-      gsap.set([badge, ...titleItems, ...descriptionItems, ...actionItems, note], {
-        opacity: 0,
-        y: 14,
-      });
-
-      const tl = gsap.timeline({
-        defaults: {
-          duration: 0.82,
-          ease: "power2.out",
-        },
-      });
-
-      tl.to(badge, { opacity: 1, y: 0, duration: 0.54 }, 0);
-      tl.to(
-        titleItems,
-        {
-          opacity: 1,
-          y: 0,
-          stagger: 0.03,
-          duration: 0.68,
-        },
-        0.08,
-      );
-      tl.to(
-        descriptionItems,
-        {
-          opacity: 1,
-          y: 0,
-          stagger: 0.01,
-          duration: 0.56,
-        },
-        0.18,
-      );
-      tl.to(
-        actionItems,
-        {
-          opacity: 1,
-          y: 0,
-          stagger: 0.06,
-          duration: 0.62,
-        },
-        0.32,
-      );
-      tl.to(note, { opacity: 1, y: 0, duration: 0.5 }, 0.42);
-    }, root);
-
-    return () => ctx.revert();
-  }, []);
-
-  const description = [
-    "I build backend-focused systems and full-stack applications that handle real data, performance constraints, and scalable architecture.",
-    "My work includes designing APIs, building data processing pipelines, and developing end-to-end systems from ingestion and query execution to visualization and deployment.",
-  ].join(" ");
-  const titleText = "Vinayak Nautiyal";
-  const titleSegments = titleText.split(/(\s+)/).filter(Boolean);
-  const descriptionSegments = description.split(/(\s+)/).filter(Boolean);
+  useReveal(heroRef, [
+    { targets: [badgeRef], delay: motion.reveal.delay.heroEyebrow },
+    { targets: [descriptionRef], delay: motion.reveal.delay.heroParagraph, duration: motion.duration.sectionItem },
+    { targets: [actionsRef, linksRef], delay: motion.reveal.delay.tags, duration: motion.duration.sectionItem, stagger: motion.stagger.items },
+  ]);
 
   return (
-    <section ref={rootRef} className="flex min-h-screen flex-col justify-center pt-28 pb-20 md:pt-36 md:pb-24" aria-label="Intro">
-      <div className="mx-auto max-w-4xl text-center">
-        <div ref={badgeRef} className="flex flex-wrap justify-center gap-2 opacity-0">
-          <Badge>Backend Systems • Data Processing • Full-Stack Engineering</Badge>
+    <section
+      ref={heroRef}
+      className="relative flex min-h-[100svh] flex-col justify-center px-1 pt-20 pb-10 md:pt-24 md:pb-16"
+      aria-label="Intro"
+    >
+      <div className="relative mx-auto w-full max-w-4xl text-center">
+        <div ref={badgeRef} className="flex justify-center">
+          <Badge className="max-w-full whitespace-normal text-center leading-5">{heroBadgeText}</Badge>
         </div>
 
-        <h1
-          ref={titleRef}
-          className="mt-5 text-balance text-5xl font-semibold tracking-[-0.02em] text-white md:text-6xl"
-          aria-label={titleText}
-        >
-          {titleSegments.map((segment, index) => (
-            <span
-              key={`${segment}-${index}`}
-              ref={(node) => {
-                titleWords.current[index] = node;
-              }}
-              className="inline-block will-change-transform"
-              aria-hidden="true"
-              style={{ opacity: 0, transform: "translateY(14px)" }}
-            >
-              {segment === " " ? "\u00A0" : segment}
-            </span>
-          ))}
+        <h1 ref={headingRef} className="mt-6 text-balance text-[clamp(2.1rem,9.7vw,5.25rem)] font-semibold leading-[1.02] tracking-[-0.045em] text-white">
+          Vinayak Nautiyal
         </h1>
 
-        <p
-          ref={descriptionRef}
-          className="mx-auto mt-5 max-w-2xl text-pretty text-base leading-8 text-slate-300 md:text-lg"
-        >
-          {descriptionSegments.map((segment, index) => (
-            <span
-              key={`${segment}-${index}`}
-              ref={(node) => {
-                descriptionWords.current[index] = node;
-              }}
-              className="inline-block will-change-transform"
-              aria-hidden="true"
-              style={{ opacity: 0, transform: "translateY(14px)" }}
-            >
-              {segment === " " ? "\u00A0" : segment}
-            </span>
-          ))}
+        <p ref={descriptionRef} className="mx-auto mt-5 max-w-2xl text-pretty text-[15px] leading-7 text-slate-300 sm:text-base sm:leading-8 md:text-lg">
+          I’m a third-year BTech student who builds backend services and full-stack tools. My projects explore API
+          design, data processing, integrations, and interfaces that make system behavior easier to inspect.
         </p>
 
-        <div
-          ref={ctaRef}
-          className="mt-8 flex flex-col justify-center gap-3 sm:flex-row sm:items-center"
-        >
-          <div
-            ref={(node) => {
-              ctaItems.current[0] = node;
-            }}
-            className="will-change-transform"
-            style={{ opacity: 0, transform: "translateY(14px)" }}
-          >
-            <Button href="#projects">View Systems Projects</Button>
-          </div>
-
-          <div
-            ref={(node) => {
-              ctaItems.current[1] = node;
-            }}
-            className="will-change-transform"
-            style={{ opacity: 0, transform: "translateY(14px)" }}
-          >
-            <Button href="/resume.pdf" target="_blank" rel="noreferrer" variant="secondary">
-              View Resume
-            </Button>
-          </div>
-
-          <div
-            ref={(node) => {
-              ctaItems.current[2] = node;
-            }}
-            className="will-change-transform"
-            style={{ opacity: 0, transform: "translateY(14px)" }}
-          >
-            <Button href="https://github.com/slept3arly" target="_blank" rel="noreferrer" variant="ghost">
-              GitHub
-            </Button>
-          </div>
-
-          <div
-            ref={(node) => {
-              ctaItems.current[3] = node;
-            }}
-            className="will-change-transform"
-            style={{ opacity: 0, transform: "translateY(14px)" }}
-          >
-            <Button
-              href="https://www.linkedin.com/in/slept3arly/"
-              target="_blank"
-              rel="noreferrer"
-              variant="ghost"
-            >
-              LinkedIn
-            </Button>
-          </div>
+        <div ref={actionsRef} className="mx-auto mt-7 grid w-full max-w-md grid-cols-2 gap-2 sm:flex sm:max-w-none sm:justify-center sm:gap-3">
+          <Button href="#projects" className="w-full sm:w-auto">View projects</Button>
+          <Button href="/resume.pdf" target="_blank" rel="noreferrer" variant="secondary" className="w-full sm:w-auto">
+            View resume
+          </Button>
         </div>
 
-        <p ref={noteRef} className="mt-5 text-sm text-slate-400" style={{ opacity: 0, transform: "translateY(14px)" }}>
-          Focused on backend systems, data processing, and scalable architecture.
-        </p>
+        <div ref={linksRef} className="mt-5 flex items-center justify-center gap-5 text-sm text-slate-400">
+          <a className="interactive-link" href="https://github.com/slept3arly" target="_blank" rel="noreferrer">GitHub</a>
+          <a className="interactive-link" href="https://www.linkedin.com/in/slept3arly/" target="_blank" rel="noreferrer">LinkedIn</a>
+        </div>
       </div>
     </section>
   );

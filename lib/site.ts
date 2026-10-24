@@ -1,8 +1,8 @@
 export const siteConfig = {
   name: "Vinayak Nautiyal",
-  title: "Vinayak Nautiyal | Frontend Developer",
+  title: "Vinayak Nautiyal | Backend & Full-Stack Developer",
   description:
-    "Frontend developer building modern, performance-focused web apps with clean UI, practical UX, and production-grade structure.",
+    "Third-year BTech student building backend services and full-stack tools across APIs, data processing, integrations, and system visualization.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com",
   locale: "en_US",
   social: {
