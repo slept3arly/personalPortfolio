@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useId, useRef, useState, useSyncExternalStore, type KeyboardEvent, type MouseEvent, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import Badge from "./Badge";
+import { motion } from "@/lib/motion";
+import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
 
 type OpenProject = (trigger: HTMLElement) => void;
 type RegisterOpen = (projectIndex: number, handler: OpenProject | null) => void;
@@ -26,23 +28,55 @@ export default function ProjectDetails({ title, role, summary, technologies, chi
   const dialogRef = useRef<HTMLDialogElement | null>(null);
   const closeRef = useRef<HTMLButtonElement | null>(null);
   const triggerRef = useRef<HTMLElement | null>(null);
+  const closeTimerRef = useRef<number | null>(null);
+  const openingFrameRef = useRef<number | null>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const reducedMotion = usePrefersReducedMotion();
   const portalRoot = useSyncExternalStore(subscribeToPortalRoot, getPortalRoot, getServerPortalRoot);
 
   const openDialog = useCallback((trigger: HTMLElement) => {
     const dialog = dialogRef.current;
     if (!dialog || dialog.open) return;
     triggerRef.current = trigger;
+    const animateMobile = window.matchMedia("(max-width: 639px)").matches &&
+      !reducedMotion &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (animateMobile) dialog.dataset.transitionState = "opening";
+    else delete dialog.dataset.transitionState;
     dialog.showModal();
     setIsOpen(true);
     closeRef.current?.focus({ preventScroll: true });
-  }, []);
+    if (animateMobile) {
+      openingFrameRef.current = window.requestAnimationFrame(() => {
+        openingFrameRef.current = null;
+        if (dialog.open && dialog.dataset.transitionState === "opening") {
+          dialog.dataset.transitionState = "open";
+        }
+      });
+    }
+  }, [reducedMotion]);
 
-  const closeDialog = () => {
+  const closeDialog = useCallback(() => {
     const dialog = dialogRef.current;
     if (!dialog?.open) return;
-    dialog.close();
-  };
+    if (openingFrameRef.current !== null) {
+      window.cancelAnimationFrame(openingFrameRef.current);
+      openingFrameRef.current = null;
+    }
+    const animateMobile = window.matchMedia("(max-width: 639px)").matches &&
+      !reducedMotion &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!animateMobile) {
+      dialog.close();
+      return;
+    }
+    if (dialog.dataset.transitionState === "closing") return;
+    dialog.dataset.transitionState = "closing";
+    closeTimerRef.current = window.setTimeout(() => {
+      closeTimerRef.current = null;
+      if (dialog.open) dialog.close();
+    }, motion.duration.dialog * 1000);
+  }, [reducedMotion]);
 
   const onDialogClick = (event: MouseEvent<HTMLDialogElement>) => {
     event.stopPropagation();
@@ -74,6 +108,31 @@ export default function ProjectDetails({ title, role, summary, technologies, chi
     };
   }, [isOpen]);
 
+  useEffect(() => {
+    if (!reducedMotion) return;
+    const dialog = dialogRef.current;
+    if (!dialog?.open) return;
+    if (openingFrameRef.current !== null) {
+      window.cancelAnimationFrame(openingFrameRef.current);
+      openingFrameRef.current = null;
+    }
+    if (dialog.dataset.transitionState === "closing") {
+      if (closeTimerRef.current !== null) window.clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+      dialog.close();
+    } else if (dialog.dataset.transitionState === "opening") {
+      dialog.dataset.transitionState = "open";
+    }
+  }, [reducedMotion]);
+
+  useEffect(() => () => {
+    if (openingFrameRef.current !== null) window.cancelAnimationFrame(openingFrameRef.current);
+    if (closeTimerRef.current !== null) window.clearTimeout(closeTimerRef.current);
+    const dialog = dialogRef.current;
+    if (dialog?.open) dialog.close();
+    delete dialog?.dataset.transitionState;
+  }, []);
+
   if (!portalRoot) return null;
 
   return createPortal(
@@ -88,6 +147,9 @@ export default function ProjectDetails({ title, role, summary, technologies, chi
         closeDialog();
       }}
       onClose={() => {
+        if (closeTimerRef.current !== null) window.clearTimeout(closeTimerRef.current);
+        closeTimerRef.current = null;
+        delete dialogRef.current?.dataset.transitionState;
         setIsOpen(false);
       }}
       onClick={onDialogClick}

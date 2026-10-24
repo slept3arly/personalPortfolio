@@ -26,6 +26,8 @@ export type RevealGroup = {
   stagger?: number;
   /** Start after all elements in the preceding group have finished. */
   afterPrevious?: boolean;
+  /** Optionally reveal a group only when a media query matches. */
+  media?: string;
 };
 
 function resolveRef(ref: Target): HTMLElement[] {
@@ -70,73 +72,94 @@ export function useReveal<T extends HTMLElement>(
   useIsomorphicLayoutEffect(() => {
     const root = rootRef.current;
     if (!root) return;
-
-    const resolved = groupsRef.current
-      .map((group) => ({
-        targets: resolveTargets(group),
-        delay: group.delay ?? motion.reveal.delay.content,
-        duration: group.duration ?? motion.duration.sectionContent,
-        stagger: group.stagger ?? 0,
-        afterPrevious: group.afterPrevious ?? false,
-      }))
-      .filter((group) => group.targets.length > 0);
-
-    // Missing refs or nothing to animate: leave the content visible instead
-    // of hiding it behind an animation that will never run.
-    if (resolved.length === 0) return;
-
-    // Read the preference directly so reduced-motion users never see content
-    // hidden and re-shown around hydration.
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    let previousEnd = 0;
-    const sequenced = resolved.map((group) => {
-      const start = group.afterPrevious ? previousEnd : group.delay;
-      const span = group.duration + group.stagger * Math.max(0, group.targets.length - 1);
-      previousEnd = Math.max(previousEnd, start + span);
-      return { ...group, start };
-    });
-    const all = sequenced.flatMap((group) => group.targets);
+    let hasPlayed = false;
     let stopReveal: (() => void) | undefined;
     let timeline: gsap.core.Timeline | undefined;
     let ctx: gsap.Context | undefined;
+    const mediaQueries = Array.from(new Set(groupsRef.current.flatMap((group) => group.media ? [group.media] : [])))
+      .map((query) => window.matchMedia(query));
 
-    try {
-      ctx = gsap.context(() => {
-        gsap.set(all, { opacity: 0, y: motion.reveal.y });
-        timeline = gsap.timeline({ paused: true, defaults: { ease: motion.ease.standard } });
-        for (const group of sequenced) {
-          timeline.to(
-            group.targets,
-            {
-              opacity: 1,
-              y: 0,
-              duration: group.duration,
-              stagger: group.stagger,
-            },
-            group.start,
-          );
-        }
-      }, root);
-      stopReveal = observeOnce(root, () => timeline?.play(0));
-    } catch {
-      // If setup fails part-way, restore the natural visible state.
+    const teardownAnimation = () => {
       stopReveal?.();
       timeline?.kill();
       ctx?.revert();
-      gsap.killTweensOf(all);
-      gsap.set(all, { clearProps: "opacity,visibility,transform" });
-      return;
-    }
-
-    const teardown = () => {
-      stopReveal?.();
-      ctx?.revert();
-    };
-    teardownRef.current = teardown;
-    return () => {
+      stopReveal = undefined;
+      timeline = undefined;
+      ctx = undefined;
       teardownRef.current = null;
-      teardown();
+    };
+
+    const setupAnimation = () => {
+      if (hasPlayed || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+      const resolved = groupsRef.current
+        .filter((group) => !group.media || window.matchMedia(group.media).matches)
+        .map((group) => ({
+          targets: resolveTargets(group),
+          delay: group.delay ?? motion.reveal.delay.content,
+          duration: group.duration ?? motion.duration.sectionContent,
+          stagger: group.stagger ?? 0,
+          afterPrevious: group.afterPrevious ?? false,
+        }))
+        .filter((group) => group.targets.length > 0);
+
+      // Missing refs or nothing to animate: leave the content visible instead
+      // of hiding it behind an animation that will never run.
+      if (resolved.length === 0) return;
+
+      let previousEnd = 0;
+      const sequenced = resolved.map((group) => {
+        const start = group.afterPrevious ? previousEnd : group.delay;
+        const span = group.duration + group.stagger * Math.max(0, group.targets.length - 1);
+        previousEnd = Math.max(previousEnd, start + span);
+        return { ...group, start };
+      });
+      const all = sequenced.flatMap((group) => group.targets);
+
+      try {
+        ctx = gsap.context(() => {
+          gsap.set(all, { opacity: 0, y: motion.reveal.y });
+          timeline = gsap.timeline({ paused: true, defaults: { ease: motion.ease.standard } });
+          for (const group of sequenced) {
+            timeline.to(
+              group.targets,
+              {
+                opacity: 1,
+                y: 0,
+                duration: group.duration,
+                stagger: group.stagger,
+              },
+              group.start,
+            );
+          }
+        }, root);
+        stopReveal = observeOnce(root, () => {
+          hasPlayed = true;
+          timeline?.play(0);
+        });
+        teardownRef.current = teardownAnimation;
+      } catch {
+        // If setup fails part-way, restore the natural visible state.
+        teardownAnimation();
+        gsap.killTweensOf(all);
+        gsap.set(all, { clearProps: "opacity,visibility,transform" });
+      }
+    };
+
+    setupAnimation();
+    const onMediaChange = () => {
+      if (hasPlayed) {
+        teardownAnimation();
+        return;
+      }
+      teardownAnimation();
+      setupAnimation();
+    };
+    mediaQueries.forEach((query) => query.addEventListener("change", onMediaChange));
+
+    return () => {
+      mediaQueries.forEach((query) => query.removeEventListener("change", onMediaChange));
+      teardownAnimation();
     };
     // Run once per mount: the inputs below are stable refs and module
     // constants, so a change in the caller's re-renders never invalidates it.

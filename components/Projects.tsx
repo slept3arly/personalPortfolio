@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useRef, type CSSProperties } from "react";
 import gsap from "@/lib/gsap";
 import Badge from "./ui/Badge";
 import Card from "./ui/Card";
@@ -10,8 +10,9 @@ import MagneticDots from "./ui/MagneticDots";
 import SplitHeading from "./ui/SplitHeading";
 import { motion } from "@/lib/motion";
 import { useReveal } from "@/lib/useReveal";
-import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
 import { projects } from "@/lib/projectData";
+import { useMobileCardCarousel } from "./ui/useMobileCardCarousel";
+import MobileCarouselControls from "./ui/MobileCarouselControls";
 
 const projectTagOffsets = projects.map((_, index) =>
   projects.slice(0, index).reduce((total, project) => total + project.cardTechnologies.length, 0),
@@ -22,16 +23,17 @@ export default function Projects() {
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const numberRef = useRef<HTMLParagraphElement | null>(null);
   const titleRef = useRef<HTMLHeadingElement | null>(null);
-  const gridRef = useRef<HTMLDivElement | null>(null);
+  const {
+    containerRef: gridRef,
+    position: carouselPosition,
+    isAnimating: carouselIsAnimating,
+    isBusy: carouselIsBusy,
+    next: advanceCarousel,
+    previous: retreatCarousel,
+  } = useMobileCardCarousel({ count: projects.length, applyOrderOnDesktop: true });
   const projectCardRefs = useRef<Array<HTMLDivElement | null>>([]);
   const projectDetailsOpenRefs = useRef<Array<ProjectOpenHandler | null>>(Array(projects.length).fill(null));
   const projectTagRefs = useRef<Array<HTMLSpanElement | null>>([]);
-  const busyRef = useRef(false);
-  const activeCycleRef = useRef<{ card: HTMLElement; finish: () => void } | null>(null);
-  const [position, setPosition] = useState(1);
-  const [order, setOrder] = useState(projects.map((_, index) => index));
-  const [isAnimating, setIsAnimating] = useState(false);
-  const reducedMotion = usePrefersReducedMotion();
 
   const registerProjectDetailsOpen = useCallback((index: number, open: ProjectOpenHandler | null) => {
     projectDetailsOpenRefs.current[index] = open;
@@ -39,38 +41,9 @@ export default function Projects() {
 
   useReveal(sectionRef, [
     { targets: [numberRef], delay: motion.reveal.delay.number, duration: motion.duration.sectionNumber },
-    { targets: projectCardRefs, delay: motion.reveal.delay.content, stagger: motion.stagger.items },
-    { targets: projectTagRefs, duration: motion.duration.sectionItem, stagger: motion.stagger.items, afterPrevious: true },
+    { targets: projectCardRefs, delay: motion.reveal.delay.content, stagger: motion.stagger.items, media: "(min-width: 640px)" },
+    { targets: projectTagRefs, duration: motion.duration.sectionItem, stagger: motion.stagger.items, afterPrevious: true, media: "(min-width: 640px)" },
   ]);
-
-  useLayoutEffect(() => {
-    const grid = gridRef.current;
-    if (!grid) return;
-    grid.classList.add("is-stack-ready");
-    grid.querySelectorAll<HTMLElement>("[data-project-card]").forEach((card) => {
-      const stackPosition = order.indexOf(Number(card.dataset.projectCard));
-      card.style.setProperty("--stack-position", String(stackPosition));
-      card.style.order = String(stackPosition);
-      card.dataset.stackPosition = String(stackPosition);
-      card.dataset.stackVisible = String(stackPosition <= 3);
-    });
-    const mobile = window.matchMedia("(max-width: 639px)");
-    const syncAccess = () => grid.querySelectorAll<HTMLElement>("[data-project-card]").forEach((card) => {
-      const behind = mobile.matches && Number(card.dataset.stackPosition) !== 0;
-      card.setAttribute("aria-hidden", behind ? "true" : "false");
-      card.inert = behind;
-    });
-    syncAccess();
-    mobile.addEventListener("change", syncAccess);
-    return () => {
-      mobile.removeEventListener("change", syncAccess);
-      grid.classList.remove("is-stack-ready");
-      grid.querySelectorAll<HTMLElement>("[data-project-card]").forEach((card) => {
-        card.removeAttribute("aria-hidden");
-        card.inert = false;
-      });
-    };
-  }, [order]);
 
   useEffect(() => {
     const grid = gridRef.current;
@@ -117,34 +90,10 @@ export default function Projects() {
       desktopPointer.removeEventListener("change", setup);
       reduce.removeEventListener("change", setup);
     };
-  }, []);
-
-  const nextProject = () => {
-    if (busyRef.current) return;
-    const grid = gridRef.current;
-    if (!grid) return;
-    const outgoing = grid.querySelector<HTMLElement>(`[data-project-card="${order[0]}"]`);
-    if (!outgoing) return;
-    busyRef.current = true;
-    setIsAnimating(true);
-    const advance = () => {
-      gsap.set(outgoing, { y: 0, opacity: 1, rotation: 0, clearProps: "transform,opacity" });
-      setOrder((current) => [...current.slice(1), current[0]]);
-      setPosition((current) => current === projects.length ? 1 : current + 1);
-      busyRef.current = false;
-      setIsAnimating(false);
-      activeCycleRef.current = null;
-    };
-    if (reducedMotion || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      advance();
-      return;
-    }
-    activeCycleRef.current = { card: outgoing, finish: advance };
-    gsap.to(outgoing, { y: 120, opacity: 0, rotation: 10, duration: 0.4, ease: "power2.in", onComplete: advance });
-  };
+  }, [gridRef]);
 
   const openProjectDetails = (index: number, trigger: HTMLElement) => {
-    if (busyRef.current) return;
+    if (carouselIsBusy()) return;
     projectDetailsOpenRefs.current[index]?.(trigger);
   };
 
@@ -162,22 +111,6 @@ export default function Projects() {
     openProjectDetails(index, event.currentTarget);
   };
 
-  useEffect(() => () => {
-    const active = activeCycleRef.current;
-    if (!active) return;
-    gsap.killTweensOf(active.card);
-    gsap.set(active.card, { y: 0, opacity: 1, rotation: 0, clearProps: "transform,opacity" });
-    activeCycleRef.current = null;
-    busyRef.current = false;
-  }, []);
-
-  useEffect(() => {
-    if (!reducedMotion || !activeCycleRef.current) return;
-    const active = activeCycleRef.current;
-    gsap.killTweensOf(active.card);
-    active.finish();
-  }, [reducedMotion]);
-
   return (
     <Section id="projects" ariaLabel="Projects" className="lg:-mx-6">
       <div ref={sectionRef} className="space-y-5 md:space-y-6">
@@ -193,7 +126,7 @@ export default function Projects() {
           </header>
         </MagneticDots>
 
-        <div ref={gridRef} className="project-grid">
+        <div ref={gridRef} className="project-grid mobile-card-carousel">
           {projects.map((project, index) => {
             const longestPillLabel = project.cardTechnologies.reduce(
               (longest, technology) => technology.length > longest.length ? technology : longest,
@@ -205,6 +138,7 @@ export default function Projects() {
               <div
                 key={project.slug}
                 data-project-card={index}
+                data-carousel-item={index}
                 className="project-grid__item"
                 role="button"
                 tabIndex={0}
@@ -257,12 +191,17 @@ export default function Projects() {
           })}
         </div>
 
-        <div className="project-stack-controls" aria-label="Project navigation">
-          <p className="project-stack-position" aria-live="polite" aria-atomic="true">Project {position} of {projects.length}</p>
-          <button type="button" className="project-next" onClick={nextProject} disabled={isAnimating} aria-label="Next project">
-            Next project <span aria-hidden="true">→</span>
-          </button>
-        </div>
+        <MobileCarouselControls
+          itemLabel="Project"
+          controlsLabel="Project navigation"
+          previousLabel="Previous project"
+          nextLabel="Next project"
+          position={carouselPosition}
+          count={projects.length}
+          isAnimating={carouselIsAnimating}
+          onPrevious={retreatCarousel}
+          onNext={advanceCarousel}
+        />
       </div>
     </Section>
   );

@@ -9,6 +9,8 @@ import MagneticDots from "./ui/MagneticDots";
 import SplitHeading from "./ui/SplitHeading";
 import { motion } from "@/lib/motion";
 import { useReveal } from "@/lib/useReveal";
+import { useMobileCardCarousel } from "./ui/useMobileCardCarousel";
+import MobileCarouselControls from "./ui/MobileCarouselControls";
 
 function PillList({ items, tagRefs, indexOffset }: {
   items: string[];
@@ -16,9 +18,9 @@ function PillList({ items, tagRefs, indexOffset }: {
   indexOffset: number;
 }) {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="skills-card__pill-list flex flex-wrap gap-2">
       {items.map((x, index) => (
-        <span key={x} ref={(node) => { tagRefs.current[indexOffset + index] = node; }}><Badge>{x}</Badge></span>
+        <span key={x} ref={(node) => { tagRefs.current[indexOffset + index] = node; }}><Badge className="skills-card__pill">{x}</Badge></span>
       ))}
     </div>
   );
@@ -30,11 +32,18 @@ export default function TechStack() {
   const titleRef = useRef<HTMLHeadingElement | null>(null);
   const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
   const tagRefs = useRef<Array<HTMLSpanElement | null>>([]);
+  const {
+    containerRef: carouselRef,
+    position: carouselPosition,
+    isAnimating: carouselIsAnimating,
+    next: advanceCarousel,
+    previous: retreatCarousel,
+  } = useMobileCardCarousel({ count: skills.length });
 
   useReveal(sectionRef, [
     { targets: [numberRef], delay: motion.reveal.delay.number, duration: motion.duration.sectionNumber },
-    { targets: cardRefs, delay: motion.reveal.delay.content, stagger: motion.stagger.items },
-    { targets: tagRefs, delay: motion.reveal.delay.tags, duration: motion.duration.sectionItem, stagger: motion.stagger.items, afterPrevious: true },
+    { targets: cardRefs, delay: motion.reveal.delay.content, stagger: motion.stagger.items, media: "(min-width: 640px)" },
+    { targets: tagRefs, delay: motion.reveal.delay.tags, duration: motion.duration.sectionItem, stagger: motion.stagger.items, afterPrevious: true, media: "(min-width: 640px)" },
   ]);
 
   return (
@@ -57,16 +66,17 @@ export default function TechStack() {
           <div className="hidden h-px flex-1 bg-[color:var(--surface-border)] sm:block" />
         </header></MagneticDots>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div ref={carouselRef} className="skills-grid mobile-card-carousel grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {skills.map((group, index) => (
             <div
               key={group.title}
+              data-carousel-item={index}
               ref={(node) => { cardRefs.current[index] = node; }}
             >
-              <Card>
-                <p className="text-sm font-semibold text-white">{group.title}</p>
-                <p className="mt-2 text-sm leading-relaxed text-gray-400">{group.description}</p>
-                <div className="mt-3">
+              <Card className="skills-card">
+                <p className="skills-card__title text-sm font-semibold text-white">{group.title}</p>
+                <p className="skills-card__description mt-2 text-sm leading-relaxed text-gray-400">{group.description}</p>
+                <div className="skills-card__pills mt-3">
                   <PillList
                     items={[...group.items]}
                     tagRefs={tagRefs}
@@ -77,6 +87,17 @@ export default function TechStack() {
             </div>
           ))}
         </div>
+        <MobileCarouselControls
+          itemLabel="Category"
+          controlsLabel="Technical skills navigation"
+          previousLabel="Previous category"
+          nextLabel="Next category"
+          position={carouselPosition}
+          count={skills.length}
+          isAnimating={carouselIsAnimating}
+          onPrevious={retreatCarousel}
+          onNext={advanceCarousel}
+        />
       </div>
     </Section>
   );

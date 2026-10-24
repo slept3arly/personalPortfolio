@@ -6,6 +6,7 @@ import Button from "./ui/Button";
 import { motion } from "@/lib/motion";
 import { useReveal } from "@/lib/useReveal";
 import { useCurtainReveal } from "@/lib/useCurtainReveal";
+import FooterWaves from "./ui/FooterWaves";
 
 const heroBadgeText = "Backend Services • Data Processing • Full-Stack Tools";
 
@@ -31,9 +32,13 @@ export default function Hero() {
       className="relative flex min-h-[100svh] flex-col justify-center px-1 pt-20 pb-10 md:pt-24 md:pb-16"
       aria-label="Intro"
     >
-      <div className="relative mx-auto w-full max-w-4xl text-center">
+      <FooterWaves className="hero-top-waves sm:hidden" mobileOnly />
+      <div className="relative z-10 mx-auto w-full max-w-4xl text-center">
         <div ref={badgeRef} className="flex justify-center">
-          <Badge className="max-w-full whitespace-normal text-center leading-5">{heroBadgeText}</Badge>
+          <Badge className="max-w-full whitespace-nowrap text-center leading-5 sm:whitespace-normal">
+            <span className="sm:hidden">Backend Services • Data Processing</span>
+            <span className="hidden sm:inline">{heroBadgeText}</span>
+          </Badge>
         </div>
 
         <div ref={headingClipRef} className="hero-heading-clip">

@@ -52,7 +52,7 @@ export default function Resume() {
             </p>
           </div>
 
-          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+          <div className="resume-actions flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
             <div
               ref={(node) => {
                 actionRefs.current[0] = node;

@@ -107,13 +107,14 @@ export default function Contact() {
               </ul>
             </div>
 
-            <div className="grid justify-items-center gap-3 md:content-center">
+            <div className="contact-actions grid justify-items-center gap-3 md:content-center">
               <div
                 ref={(node) => {
                   actionRefs.current[0] = node;
                 }}
+                className="w-full md:w-52"
               >
-                <Button href={`mailto:${siteConfig.social.email}`} className="w-full md:w-52">
+                <Button href={`mailto:${siteConfig.social.email}`} variant="secondary" className="w-full">
                   Email me
                 </Button>
               </div>
@@ -122,15 +123,16 @@ export default function Contact() {
                 ref={(node) => {
                   actionRefs.current[1] = node;
                 }}
+                className="w-full md:w-52"
               >
                 <Button
-                  href="/resume.pdf"
+                  href={siteConfig.social.github}
                   target="_blank"
                   rel="noreferrer"
                   variant="secondary"
-                  className="w-full md:w-52"
+                  className="w-full"
                 >
-                  View resume
+                  GitHub
                 </Button>
               </div>
 
@@ -138,8 +140,9 @@ export default function Contact() {
                 ref={(node) => {
                   actionRefs.current[2] = node;
                 }}
+                className="w-full md:w-52"
               >
-                <Button href={siteConfig.social.linkedin} target="_blank" rel="noreferrer" variant="ghost" className="w-full md:w-52">
+                <Button href={siteConfig.social.linkedin} target="_blank" rel="noreferrer" variant="secondary" className="w-full">
                   LinkedIn
                 </Button>
               </div>

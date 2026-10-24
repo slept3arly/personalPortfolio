@@ -165,7 +165,7 @@ export default function Navbar() {
       tween?.kill();
       const highlightedId = pointerHighlightIdRef.current ?? focusHighlightIdRef.current ?? activeIdRef.current;
       const target = highlightedId ? linkRefs.current[highlightedId] : null;
-      if (!target) {
+      if (!target || target.getClientRects().length === 0) {
         gsap.set(indicator, { opacity: 0 });
         return;
       }
@@ -272,7 +272,7 @@ export default function Navbar() {
     if (!activeId) return;
     const viewport = viewportRef.current;
     const target = linkRefs.current[activeId];
-    if (!viewport || !target) return;
+    if (!viewport || !target || target.getClientRects().length === 0) return;
     const view = viewport.getBoundingClientRect();
     const link = target.getBoundingClientRect();
     const behavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
@@ -295,7 +295,7 @@ export default function Navbar() {
               target={item.id === "resume" ? "_blank" : undefined}
               rel={item.id === "resume" ? "noreferrer" : undefined}
               aria-current={activeId === item.id ? "location" : undefined}
-              className={`nav-link ${item.id === "resume" ? "nav-link--cta" : ""} ${activeId === item.id ? "nav-link--active" : ""}`}
+              className={`nav-link ${item.id === "resume" ? "nav-link--cta nav-link--desktop-only" : ""} ${activeId === item.id ? "nav-link--active" : ""}`}
             >
               {item.label}
             </a>

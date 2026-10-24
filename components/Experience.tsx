@@ -9,6 +9,8 @@ import MagneticDots from "./ui/MagneticDots";
 import SplitHeading from "./ui/SplitHeading";
 import { motion } from "@/lib/motion";
 import { useReveal } from "@/lib/useReveal";
+import { useMobileCardCarousel } from "./ui/useMobileCardCarousel";
+import MobileCarouselControls from "./ui/MobileCarouselControls";
 
 export default function Experience() {
   const sectionRef = useRef<HTMLDivElement | null>(null);
@@ -17,12 +19,19 @@ export default function Experience() {
   const cardRef = useRef<HTMLDivElement | null>(null);
   const bulletRefs = useRef<Array<HTMLLIElement | null>>([]);
   const tagRefs = useRef<Array<HTMLSpanElement | null>>([]);
+  const {
+    containerRef: carouselRef,
+    position: carouselPosition,
+    isAnimating: carouselIsAnimating,
+    next: advanceCarousel,
+    previous: retreatCarousel,
+  } = useMobileCardCarousel({ count: experience.length });
 
   useReveal(sectionRef, [
     { targets: [numberRef], delay: motion.reveal.delay.number, duration: motion.duration.sectionNumber },
-    { targets: [cardRef], delay: motion.reveal.delay.content },
-    { targets: bulletRefs, delay: motion.reveal.delay.items, duration: motion.duration.sectionItem, stagger: motion.stagger.items, afterPrevious: true },
-    { targets: tagRefs, delay: motion.reveal.delay.tags, duration: motion.duration.sectionItem, stagger: motion.stagger.items, afterPrevious: true },
+    { targets: [cardRef], delay: motion.reveal.delay.content, media: "(min-width: 640px)" },
+    { targets: bulletRefs, delay: motion.reveal.delay.items, duration: motion.duration.sectionItem, stagger: motion.stagger.items, afterPrevious: true, media: "(min-width: 640px)" },
+    { targets: tagRefs, delay: motion.reveal.delay.tags, duration: motion.duration.sectionItem, stagger: motion.stagger.items, afterPrevious: true, media: "(min-width: 640px)" },
   ]);
 
   return (
@@ -45,25 +54,25 @@ export default function Experience() {
           <div className="hidden h-px flex-1 bg-[color:var(--surface-border)] sm:block" />
         </header></MagneticDots>
 
-        <div ref={cardRef}>
-          <Card>
+        <div ref={cardRef} className="space-y-5 md:space-y-6">
+          <Card ref={carouselRef} className="experience-card mobile-card-carousel">
             {experience.map((item, itemIndex) => {
               const bulletOffset = experience.slice(0, itemIndex).reduce((count, entry) => count + entry.bullets.length, 0);
               const tagOffset = experience.slice(0, itemIndex).reduce((count, entry) => count + entry.tags.length, 0);
 
               return (
-                <div key={item.company} className={itemIndex > 0 ? "mt-5 border-t border-[color:var(--surface-border)] pt-5" : ""}>
-                  <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
-                    <div>
-                      <p className="text-base font-semibold text-white">{item.role}</p>
-                      <p className="mt-1 text-sm text-gray-400">
+                <div key={item.company} data-carousel-item={itemIndex} className={`experience-card__entry${itemIndex > 0 ? " mt-5 border-t border-[color:var(--surface-border)] pt-5" : ""}`}>
+                  <div className="experience-card__heading flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
+                    <div className="experience-card__identity">
+                      <p className="experience-card__role text-base font-semibold text-white">{item.role}</p>
+                      <p className="experience-card__organization mt-1 text-sm text-gray-400">
                         {item.company}{item.location ? ` · ${item.location}` : ""}
                       </p>
                     </div>
-                    <p className="text-sm text-gray-500">{item.start} — {item.end}</p>
+                    <p className="experience-card__date text-sm text-gray-500">{item.start} — {item.end}</p>
                   </div>
 
-                  <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed text-gray-300">
+                  <ul className="experience-card__bullets mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed text-gray-300">
                     {item.bullets.map((bullet, index) => {
                       const refIndex = bulletOffset + index;
                       return (
@@ -77,7 +86,7 @@ export default function Experience() {
                     })}
                   </ul>
 
-                  <div className="mt-3 flex flex-wrap gap-2">
+                  <div className="experience-card__pills mt-3 flex flex-wrap gap-2">
                     {item.tags.map((tag, index) => {
                       const refIndex = tagOffset + index;
                       return (
@@ -85,7 +94,7 @@ export default function Experience() {
                           key={tag}
                           ref={(node) => { tagRefs.current[refIndex] = node; }}
                         >
-                          <Badge>{tag}</Badge>
+                          <Badge className="experience-card__pill">{tag}</Badge>
                         </span>
                       );
                     })}
@@ -94,6 +103,17 @@ export default function Experience() {
               );
             })}
           </Card>
+          <MobileCarouselControls
+            itemLabel="Experience"
+            controlsLabel="Experience navigation"
+            previousLabel="Previous experience"
+            nextLabel="Next experience"
+            position={carouselPosition}
+            count={experience.length}
+            isAnimating={carouselIsAnimating}
+            onPrevious={retreatCarousel}
+            onNext={advanceCarousel}
+          />
         </div>
       </div>
     </Section>
