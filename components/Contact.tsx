@@ -46,7 +46,7 @@ export default function Contact() {
         </header></MagneticDots>
 
         <Card ref={cardRef} className="mt-5">
-            <div className="grid gap-6 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] md:items-start">
+            <div className="grid gap-6 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] md:items-stretch">
             <div className="space-y-6">
               <header className="max-w-2xl space-y-3">
                 <p
@@ -107,7 +107,7 @@ export default function Contact() {
               </ul>
             </div>
 
-            <div className="grid gap-3 md:justify-end">
+            <div className="grid justify-items-center gap-3 md:content-center">
               <div
                 ref={(node) => {
                   actionRefs.current[0] = node;

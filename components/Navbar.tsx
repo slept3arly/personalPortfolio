@@ -52,6 +52,8 @@ export default function Navbar() {
   const indicatorRef = useRef<HTMLSpanElement | null>(null);
   const linkRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
   const activeIdRef = useRef<string | null>(null);
+  const pointerHighlightIdRef = useRef<string | null>(null);
+  const focusHighlightIdRef = useRef<string | null>(null);
   const scheduleMeasureRef = useRef<(() => void) | null>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
 
@@ -161,7 +163,8 @@ export default function Navbar() {
       // Kill any in-flight tween before every path — including early returns —
       // so a stale pill can never reappear over an inactive item.
       tween?.kill();
-      const target = activeIdRef.current ? linkRefs.current[activeIdRef.current] : null;
+      const highlightedId = pointerHighlightIdRef.current ?? focusHighlightIdRef.current ?? activeIdRef.current;
+      const target = highlightedId ? linkRefs.current[highlightedId] : null;
       if (!target) {
         gsap.set(indicator, { opacity: 0 });
         return;
@@ -172,15 +175,59 @@ export default function Navbar() {
       // (`.nav-desktop` has no border), so this math needs no padding offset.
       const navRect = nav.getBoundingClientRect();
       const targetRect = target.getBoundingClientRect();
-      const inset = motion.navbar.indicatorInset;
-      const left = targetRect.left - navRect.left + inset;
-      const width = Math.max(0, targetRect.width - inset * 2);
+      const horizontalBleed = motion.navbar.indicatorBleed;
+      const itemIndex = navItems.findIndex((item) => item.id === highlightedId);
+      const navPadding = getComputedStyle(nav);
+      const leftPadding = Number.parseFloat(navPadding.paddingLeft);
+      const rightPadding = Number.parseFloat(navPadding.paddingRight);
+      const leftBleed = itemIndex === 0 ? Math.max(0, leftPadding - horizontalBleed) : horizontalBleed;
+      const rightBleed = itemIndex === navItems.length - 1
+        ? Math.max(0, rightPadding - horizontalBleed)
+        : horizontalBleed;
+      const viewportRect = viewport.getBoundingClientRect();
+      const minLeft = viewportRect.left - navRect.left + horizontalBleed;
+      const maxRight = viewportRect.right - navRect.left - horizontalBleed;
+      const left = Math.max(minLeft, targetRect.left - navRect.left - leftBleed);
+      const right = Math.min(maxRight, targetRect.right - navRect.left + rightBleed);
+      const width = Math.max(0, right - left);
       if (reducedMotion.matches) gsap.set(indicator, { left, width, opacity: 1 });
       else tween = gsap.to(indicator, { left, width, opacity: 1, duration: motion.duration.navbar, ease: motion.ease.standard, overwrite: true });
     };
     const schedule = () => {
       if (disposed || frame) return;
       frame = window.requestAnimationFrame(measure);
+    };
+    const navItemIdFromTarget = (target: EventTarget | null) => {
+      if (!(target instanceof Element)) return null;
+      return target.closest<HTMLAnchorElement>("[data-nav-id]")?.dataset.navId ?? null;
+    };
+    const onPointerOver = (event: PointerEvent) => {
+      if (event.pointerType === "touch") return;
+      const nextId = navItemIdFromTarget(event.target);
+      if (!nextId || nextId === pointerHighlightIdRef.current) return;
+      pointerHighlightIdRef.current = nextId;
+      schedule();
+    };
+    const onPointerOut = (event: PointerEvent) => {
+      if (event.pointerType === "touch") return;
+      const nextId = navItemIdFromTarget(event.relatedTarget);
+      if (nextId === pointerHighlightIdRef.current) return;
+      pointerHighlightIdRef.current = nextId;
+      schedule();
+    };
+    const onFocusIn = (event: FocusEvent) => {
+      const nextId = navItemIdFromTarget(event.target);
+      const hadPointerHighlight = pointerHighlightIdRef.current !== null;
+      pointerHighlightIdRef.current = null;
+      if (!nextId || (nextId === focusHighlightIdRef.current && !hadPointerHighlight)) return;
+      focusHighlightIdRef.current = nextId;
+      schedule();
+    };
+    const onFocusOut = (event: FocusEvent) => {
+      const nextId = navItemIdFromTarget(event.relatedTarget);
+      if (nextId === focusHighlightIdRef.current) return;
+      focusHighlightIdRef.current = nextId;
+      schedule();
     };
     scheduleMeasureRef.current = schedule;
 
@@ -189,6 +236,10 @@ export default function Navbar() {
     resizeObserver.observe(nav);
     Object.values(linkRefs.current).forEach((link) => { if (link) resizeObserver.observe(link); });
     viewport.addEventListener("scroll", schedule, { passive: true });
+    nav.addEventListener("pointerover", onPointerOver);
+    nav.addEventListener("pointerout", onPointerOut);
+    nav.addEventListener("focusin", onFocusIn);
+    nav.addEventListener("focusout", onFocusOut);
     window.addEventListener("resize", schedule);
     reducedMotion.addEventListener("change", schedule);
     document.fonts?.ready.then(() => { if (!disposed) schedule(); });
@@ -199,6 +250,10 @@ export default function Navbar() {
       scheduleMeasureRef.current = null;
       resizeObserver.disconnect();
       viewport.removeEventListener("scroll", schedule);
+      nav.removeEventListener("pointerover", onPointerOver);
+      nav.removeEventListener("pointerout", onPointerOut);
+      nav.removeEventListener("focusin", onFocusIn);
+      nav.removeEventListener("focusout", onFocusOut);
       window.removeEventListener("resize", schedule);
       reducedMotion.removeEventListener("change", schedule);
       if (frame) window.cancelAnimationFrame(frame);
@@ -236,6 +291,7 @@ export default function Navbar() {
               key={item.id}
               ref={(node) => { linkRefs.current[item.id] = node; }}
               href={item.href}
+              data-nav-id={item.id}
               target={item.id === "resume" ? "_blank" : undefined}
               rel={item.id === "resume" ? "noreferrer" : undefined}
               aria-current={activeId === item.id ? "location" : undefined}

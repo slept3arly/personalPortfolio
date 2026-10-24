@@ -21,9 +21,9 @@ export function useCurtainReveal(elementRef: RefObject<HTMLElement | null>) {
     try {
       context = gsap.context(() => {
         gsap.from(element, {
-          // Extend the clip vertically beyond the tight 1.02 line box so
-          // glyph ascenders/descenders remain visible during the horizontal wipe.
-          clipPath: "inset(-0.12em 50% -0.12em 50%)",
+          // The target is a padded wrapper, so the center-out wipe clips the
+          // text inside a line box with extra clearance for glyph overhang.
+          clipPath: "inset(-0.18em 50% -0.18em 50%)",
           duration: 1,
           ease: "power3.inOut",
           clearProps: "clipPath",

@@ -87,8 +87,8 @@ export const motion = {
     /** Navbar background opacity at rest and when scrolled. */
     bgOpacityRest: 0.72,
     bgOpacityScrolled: 1,
-    /** Horizontal inset between the measured nav link and its active frame. */
-    indicatorInset: 3,
+    /** Horizontal extension beyond each side of the active nav link. */
+    indicatorBleed: 4,
   },
 
   tilt: {
